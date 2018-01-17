@@ -5,5 +5,8 @@ public class EventHandler {
 	public EventHandler(Event e) {
 		event = e;
 	}
+	public void CheckEvent() {
+		
+	}
 	
 }
