@@ -5,7 +5,8 @@ public class Test {
 		// TODO Auto-generated method stub
 		Field f = new Field("String");
 		IntegerField i = new IntegerField("5");
-
+		String s = "Happy";
+		System.out.println(s.substring(0,1));
 	}
 
 }

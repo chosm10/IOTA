@@ -1,5 +1,5 @@
 
-public class Field {
+public class Field implements EventElement{
 	String old_value;
 	String new_value;
 	String fieldType;
@@ -25,5 +25,14 @@ public class Field {
 			return false;
 		}
 
-	} 
+	}
+	public String GetOldValue() {
+		return old_value;
+	}
+	public String GetNewValue() {
+		return new_value;
+	}
+	public String GetType() {
+		return "Field";
+	}
 }

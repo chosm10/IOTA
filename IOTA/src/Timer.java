@@ -1,5 +1,5 @@
 import java.util.Calendar;
-public class Timer {
+public class Timer implements EventElement{
 	int StartTime;
 	int CurrentTime;
 	int CloseTime;
@@ -14,5 +14,14 @@ public class Timer {
 			return true;
 		}
 		return false;
+	}
+	public String GetOldValue() {
+		return Integer.toString(StartTime);
+	}
+	public String GetNewValue() {
+		return Integer.toString(CloseTime);
+	}
+	public String GetType() {
+		return "Timer";
 	}
 }
