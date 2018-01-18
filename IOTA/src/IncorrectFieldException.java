@@ -1,9 +1,9 @@
 
 public class IncorrectFieldException extends RuntimeException{
-	public IncorrectFieldException() {
-		
+	public IncorrectFieldException(String msg) {
+		super(msg);
 	}
-	public void PrintErrorMessage() {
-		System.out.println("Incorrect Field change is triggered");
+	public IncorrectFieldException(Exception e) {
+		super(e);
 	}
 }
