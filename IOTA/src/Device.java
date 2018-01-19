@@ -1,7 +1,7 @@
 
 public class Device {
 	Property property;
-	Field lock;
+	Field f;
 	Timer m;
 	
 	public Device() {
@@ -10,16 +10,16 @@ public class Device {
 		return this.property;
 	}
 	public void SetField(String n) {
-		lock = new Field(n);
+		f = new Field(n);
 	}
 	public void SetTimer(int time) {
 		m = new Timer(time);
 	}
 	public Field GetField() throws NotInitializeException{
-		if(lock == null) {
+		if(f == null) {
 			throw new NotInitializeException("필드 값이 초기화 되지 않았습니다.");// lock 필드의 값이 초기화 안 됬는데 사용하려고 하면 에러
 		}
-		return this.lock;
+		return this.f;
 	}
 	public Timer GetTimer() {
 		if(m == null) {
