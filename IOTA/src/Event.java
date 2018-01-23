@@ -8,7 +8,7 @@ public class Event {
 	public Boolean IsEventTriggered() { // 전, 후 값 상관 없이 값이 변했는지
 		if(eventElement.GetOldValue() != eventElement.GetCurrentValue()) {
 			return true;
-		}		
+		}
 		else {
 			return false;
 		}

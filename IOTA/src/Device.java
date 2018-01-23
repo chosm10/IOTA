@@ -4,13 +4,13 @@ public class Device {
 	Field f;
 	Timer m;
 	
-	public Device() {
+	public Device(String n) {
+		this.f = new Field(n);
+		this.property = new Property();
+		this.m = null;
 	}
 	public Property GetProperty() {
 		return this.property;
-	}
-	public void SetField(String n) {
-		f = new Field(n);
 	}
 	public void SetTimer(int time) {
 		m = new Timer(time);

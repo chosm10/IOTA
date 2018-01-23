@@ -1,7 +1,8 @@
 
 public class Door extends Device{
-	public Door() {
-		property.AddPropertyValue("locked");
-		property.AddPropertyValue("unlocked");
+	public Door(String n) {
+		super(n);
+		property.AddPropertyValue("Locked");
+		property.AddPropertyValue("UnLocked");
 	}
 }
