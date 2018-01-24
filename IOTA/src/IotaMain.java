@@ -8,7 +8,6 @@ public class IotaMain { //3개의 장치만 사용하고 있다는 가정 하에 simulation, 콘�
 	public static void main(String[] args) {
 		// 여기에 IOTA 프로그래밍 하는 것 처럼 프로그래밍 한다.
 		/*eval은 현재 메인 스레드와 별개의 스레드로 따로 작동하게 해야겠다.
-		Evaluation eval = new Evaluation(new RuleSet());
 		eval.setDaemon(true);
 		eval.start();
 		 */

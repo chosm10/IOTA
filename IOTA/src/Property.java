@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Property {
-	List<String> values;
+	private List<String> values;
 	public Property() {
-		values = new ArrayList<>();
+		this.values = new ArrayList<>();
 	}
 	public List<String> GetValues() {
 		return this.values;
