@@ -22,7 +22,7 @@ public class Field implements EventElement{
 			Double.parseDouble(value);
 			return true;
 		} catch(NumberFormatException e) {
-			
+
 			return false;
 		}
 	}

@@ -1,61 +1,48 @@
 import java.util.Scanner;
 
 public class IotaMain { //3°³ÀÇ ÀåÄ¡¸¸ »ç¿ëÇÏ°í ÀÖ´Ù´Â °¡Á¤ ÇÏ¿¡ simulation, ÄÜ¼Ö·Î ¹Ù²Ù·Á´Â ÀåÄ¡ »óÅÂ¸¦ ÀÔ·ÂÇÏ¸é ¹Ù²î°í Device¿¡ StopÀ» ÀÔ·ÂÇÏ¸é ¹Ýº¹À» ¸ØÃß°í ÀåÄ¡µéÀÇ »óÅÂ Ãâ·Â
-	MotionSensor motionSensor;
-	Door door;
-	HallwayLight hallwayLight;
+	static MotionSensor motionSensor;
+	static Door door;
+	static HallwayLight hallwayLight;
 
 	public static void main(String[] args) {
 		// ¿©±â¿¡ IOTA ÇÁ·Î±×·¡¹Ö ÇÏ´Â °Í Ã³·³ ÇÁ·Î±×·¡¹Ö ÇÑ´Ù.
-		/*
+		/*evalÀº ÇöÀç ¸ÞÀÎ ½º·¹µå¿Í º°°³ÀÇ ½º·¹µå·Î µû·Î ÀÛµ¿ÇÏ°Ô ÇØ¾ß°Ú´Ù.
 		Evaluation eval = new Evaluation(new RuleSet());
 		eval.setDaemon(true);
 		eval.start();
 		 */
 		IotaMain main = new IotaMain();
-		
-		while(true) {
-			Scanner input = new Scanner(System.in);
-
-			System.out.print("Device: ");
-			String device = input.nextLine();
-			if(device.equals("Stop"))
-				break;
-
-			System.out.print("Select: "); // ¹Ù²Ü °ªÀÌ FiledÀÎÁö TimerÀÎÁö
-			String select = input.nextLine();
-
-			System.out.print("Value: "); // ¹Ù²Ü °ªÀÌ FiledÀÎÁö TimerÀÎÁö
-			String value = input.nextLine();
-			
-			main.EventTriggered(device, select, value);
-		}
-		
-		System.out.println("MotionSensor: " + main.GetMotionSensorState());
-		System.out.println("Door: " + main.GetDoorState());
-		System.out.println("HallwayLight: " + main.GetHallwayLightState());
-	}
-
-	public IotaMain() {
 		motionSensor = new MotionSensor("Off");
 		door = new Door("Locked");
 		hallwayLight = new HallwayLight("Off");
+		Scanner input = new Scanner(System.in);
+		
+		while(true) {
+			System.out.println("MotionSensor: " + motionSensor.GetCurrentState());
+			System.out.println("Door: " + door.GetCurrentState());
+			System.out.println("HallwayLight: " + hallwayLight.GetCurrentState());
+			
+			System.out.print("Device: ");
+			String device = input.nextLine();
+			if(device.equals("Stop")) { // StopÀÌ ÀÔ·Â µÇ¸é ½º·¹µå ÁßÁö
+				System.out.println("IOTA°¡ Á¾·á µÇ¾ú½À´Ï´Ù.");
+				break;
+			}
+ 
+			System.out.print("State: "); // ¹Ù²Ü °ªÀÌ FiledÀÎÁö TimerÀÎÁö
+			String state = input.nextLine();
+
+			EventTrigger(device, state);
+		}
 	}
-	public String GetMotionSensorState() {
-		return motionSensor.f.GetCurrentValue();
+
+	public IotaMain() {
 	}
-	public String GetDoorState() {
-		return door.f.GetCurrentValue();
-	}
-	public String GetHallwayLightState() {
-		return hallwayLight.f.GetCurrentValue();
-	}
-	public void EventTriggered(String device, String select, String value) throws RuntimeException{ // ex)»ç¶÷ÀÌ µé¾î¿Í¼­ motion sensor°¡ on µÈ°ÍÀ» ¹Ý¿µÇÑ´Ù.
+	public static void EventTrigger(String device, String state) throws RuntimeException{ // ex)»ç¶÷ÀÌ µé¾î¿Í¼­ motion sensor°¡ on µÈ°ÍÀ» ¹Ý¿µÇÑ´Ù.
 		switch(device) { //select°¡ TimerÀÏ ¶§´Â ¾ÆÁ÷ ºñ¿öµÒ.
 		case "MotionSensor" : 
-			switch(select) {
-			case "Field" :
-				switch(value) {
+				switch(state) {
 				case "On" :
 					motionSensor.f.FieldChange("On");
 					break;
@@ -66,16 +53,8 @@ public class IotaMain { //3°³ÀÇ ÀåÄ¡¸¸ »ç¿ëÇÏ°í ÀÖ´Ù´Â °¡Á¤ ÇÏ¿¡ simulation, ÄÜ¼
 					throw new RuntimeException("Please submit \"On\" or \"Off\".");
 				}
 				break;
-			case "Timer" :
-				break;
-			default :
-				throw new RuntimeException("Please submit \"Field\" or \"Timer\".");
-			}
-			break;
 		case "Door" : 
-			switch(select) {
-			case "Field" :
-				switch(value) {
+				switch(state) {
 				case "Locked" :
 					door.f.FieldChange("Locked");
 					break;
@@ -86,16 +65,8 @@ public class IotaMain { //3°³ÀÇ ÀåÄ¡¸¸ »ç¿ëÇÏ°í ÀÖ´Ù´Â °¡Á¤ ÇÏ¿¡ simulation, ÄÜ¼
 					throw new RuntimeException("Please submit \"Locked\" or \"UnLocked\".");
 				}
 				break;
-			case "Timer" :
-				break;
-			default :
-				throw new RuntimeException("Please submit \"Field\" or \"Timer\".");
-			}
-			break;
 		case "HallwayLight" : 
-			switch(select) {
-			case "Field" :
-				switch(value) {
+				switch(state) {
 				case "On" :
 					hallwayLight.f.FieldChange("On");
 					break;
@@ -106,12 +77,6 @@ public class IotaMain { //3°³ÀÇ ÀåÄ¡¸¸ »ç¿ëÇÏ°í ÀÖ´Ù´Â °¡Á¤ ÇÏ¿¡ simulation, ÄÜ¼
 					throw new RuntimeException("Please submit \"On\" or \"Off\".");
 				}
 				break;
-			case "Timer" :
-				break;
-			default :
-				throw new RuntimeException("Please submit \"Field\" or \"Timer\".");
-			}
-			break;
 		default :
 			throw new RuntimeException("Unregistered Device is used.");
 		}
