@@ -1,12 +1,16 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RegisteredDevices {
-	List<Device> deviceList;
+	HashMap<String, Device> devices;
 	public RegisteredDevices() {
-		deviceList = new ArrayList<>();
+		devices = new HashMap<>();
 	}
-	public void addDevice(Device device) {
-		deviceList.add(device);
+	public void addDevice(String key, Device device) {
+		devices.put(key, device);
+	}
+	public Device getDevice(String key) {
+		return this.devices.get(key);
 	}
 }

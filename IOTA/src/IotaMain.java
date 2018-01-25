@@ -20,9 +20,9 @@ public class IotaMain { //3°³ÀÇ ÀåÄ¡¸¸ »ç¿ëÇÏ°í ÀÖ´Ù´Â °¡Á¤ ÇÏ¿¡ simulation, ÄÜ¼
 		hallwayLight = new HallwayLight("HallwayLight1", "Off");
 		
 		devices = new RegisteredDevices();
-		devices.addDevice(door);
-		devices.addDevice(motionSensor);
-		devices.addDevice(hallwayLight);
+		devices.addDevice("Door1", door);
+		devices.addDevice("MotionSensor1", motionSensor);
+		devices.addDevice("HallwayLight1", hallwayLight);
 		
 		while(true) {
 			System.out.println("MotionSensor: " + motionSensor.GetCurrentState());
@@ -45,8 +45,13 @@ public class IotaMain { //3°³ÀÇ ÀåÄ¡¸¸ »ç¿ëÇÏ°í ÀÖ´Ù´Â °¡Á¤ ÇÏ¿¡ simulation, ÄÜ¼
 
 	public IotaMain() {
 	}
-	public static void EventTrigger(String device, String state) throws RuntimeException{ // ex)»ç¶÷ÀÌ µé¾î¿Í¼­ motion sensor°¡ on µÈ°ÍÀ» ¹Ý¿µÇÑ´Ù.
-		switch(device) { 
+	public static void EventTrigger(String devName, String state) throws RuntimeException {
+		String property1 = devices.getDevice("devName").GetProperty().GetValue(0);
+		String property2 = devices.getDevice("devName").GetProperty().GetValue(1);
+	}
+	/*
+	public static void EventTrigger(String devName, String state) throws RuntimeException{ // ex)»ç¶÷ÀÌ µé¾î¿Í¼­ motion sensor°¡ on µÈ°ÍÀ» ¹Ý¿µÇÑ´Ù.
+		switch(devName) { 
 		case "MotionSensor" : 
 				switch(state) {
 				case "On" :
@@ -87,4 +92,5 @@ public class IotaMain { //3°³ÀÇ ÀåÄ¡¸¸ »ç¿ëÇÏ°í ÀÖ´Ù´Â °¡Á¤ ÇÏ¿¡ simulation, ÄÜ¼
 			throw new RuntimeException("Unregistered Device is used.");
 		}
 	}
+	*/
 }
