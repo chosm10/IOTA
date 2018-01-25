@@ -4,7 +4,8 @@ public class IotaMain { //3개의 장치만 사용하고 있다는 가정 하에 simulation, 콘�
 	static MotionSensor motionSensor;
 	static Door door;
 	static HallwayLight hallwayLight;
-
+	static RegisteredDevices devices;
+	
 	public static void main(String[] args) {
 		// 여기에 IOTA 프로그래밍 하는 것 처럼 프로그래밍 한다.
 		/*eval은 현재 메인 스레드와 별개의 스레드로 따로 작동하게 해야겠다.
@@ -12,10 +13,16 @@ public class IotaMain { //3개의 장치만 사용하고 있다는 가정 하에 simulation, 콘�
 		eval.start();
 		 */
 		IotaMain main = new IotaMain();
-		motionSensor = new MotionSensor("Off");
-		door = new Door("Locked");
-		hallwayLight = new HallwayLight("Off");
 		Scanner input = new Scanner(System.in);
+		
+		door = new Door("Door1", "Locked");
+		motionSensor = new MotionSensor("MotionSensor1", "Off");
+		hallwayLight = new HallwayLight("HallwayLight1", "Off");
+		
+		devices = new RegisteredDevices();
+		devices.addDevice(door);
+		devices.addDevice(motionSensor);
+		devices.addDevice(hallwayLight);
 		
 		while(true) {
 			System.out.println("MotionSensor: " + motionSensor.GetCurrentState());
