@@ -39,7 +39,7 @@ public class IotaMain { //3개의 장치만 사용하고 있다는 가정 하에 simulation, 콘�
 	public IotaMain() {
 	}
 	public static void EventTrigger(String device, String state) throws RuntimeException{ // ex)사람이 들어와서 motion sensor가 on 된것을 반영한다.
-		switch(device) { //select가 Timer일 때는 아직 비워둠.
+		switch(device) { 
 		case "MotionSensor" : 
 				switch(state) {
 				case "On" :
