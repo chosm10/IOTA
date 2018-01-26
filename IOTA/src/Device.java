@@ -13,6 +13,22 @@ public class Device {
 	public Property GetProperty() {
 		return this.property;
 	}
+	public String GetDevName() { //장치의 이름을 얻는 메소드
+		return this.devName;
+	}
+	public EventElement GetEventElement(String element)throws RuntimeException { 
+		switch(element) {
+		case "Field" :
+			return this.f;
+		case "Timer" :
+			return this.m;
+		default:
+			throw new RuntimeException("Field나 Timer외에 다른 값이 입력되었습니다.");
+		}
+	}
+	public void DeviceFieldChange(String changedValue) {
+		f.FieldChange(changedValue);
+	}
 	public void SetTimer(int time) {
 		this.m = new Timer(time);
 		this.m.Start(time);
@@ -25,9 +41,6 @@ public class Device {
 			throw new NotInitializeException("필드 값이 초기화 되지 않았습니다.");// lock 필드의 값이 초기화 안 됬는데 사용하려고 하면 에러
 		}
 		return this.f.GetCurrentValue();
-	}
-	public String GetDevName() {
-		return this.devName;
 	}
 	public Timer GetTimer() throws NotInitializeException {
 		if(m == null) {
