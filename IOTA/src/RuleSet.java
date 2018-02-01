@@ -3,7 +3,7 @@ import java.util.List;
 
 public class RuleSet {
 	List<Rule> ruleSet;
-	List<EventHandler> eventHandlerList;
+	List<Event> eventHandlerList;
 	List<Predicate> predicateList;
 	List<Action> actionList;
 	

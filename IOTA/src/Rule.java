@@ -1,16 +1,16 @@
 
 public class Rule {
-	EventHandler eventHandler;
+	Event event;
 	Predicate predicate;
 	Action action;
 	
-	public Rule(EventHandler eventHandler, Predicate predicate, Action action) {
-		this.eventHandler = eventHandler;
+	public Rule(Event event, Predicate predicate, Action action) {
+		
 		this.predicate = predicate;
 		this.action = action;
 	}
-	public EventHandler GetEventHandler() {
-		return this.eventHandler;
+	public Event GetEventHandler() {
+		return this.event;
 	}
 	public Predicate GetPredicate() {
 		return this.predicate;

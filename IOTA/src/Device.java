@@ -29,12 +29,11 @@ public class Device {
 	public void DeviceFieldChange(String changedValue) {
 		f.FieldChange(changedValue);
 	}
-	public void SetTimer(int time) {
+	public void SetTimer(int time) { // start timer at time
 		this.m = new Timer(time);
-		this.m.Start(time);
 	}
-	public void StopTimer(int time) {
-		this.m.Stop(time);
+	public void StopTimer() { //stop timer
+		this.m = null;
 	}
 	public String GetCurrentState() throws NotInitializeException {
 		if(this.f == null) {

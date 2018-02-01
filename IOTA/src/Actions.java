@@ -1,12 +1,16 @@
 import java.util.ArrayList;
-import java.util.List;
-
 public class Actions {  //한번에 여러 액션들을 하게 하는 액션들을 갖고 있고 실행하는 클래스
-	List<Action> actionList;
+	ArrayList<Action> actions;
+
 	public Actions() {
-		actionList = new ArrayList<>();
+		actions = new ArrayList<>();
 	}
 	public void addAction(Action action) {
-		actionList.add(action);
+		actions.add(action);
+	}
+	public void PerformActions() { 
+		for(Action action : this.actions) {
+			action.GetActionDevice().DeviceFieldChange(action.GetActionValue());
+		}
 	}
 }
