@@ -1,62 +1,57 @@
 import java.util.Scanner;
 
-public class IotaMain { //3개의 장치만 사용하고 있다는 가정 하에 simulation, 콘솔로 바꾸려는 장치 상태를 입력하면 바뀌고 Device에 Stop을 입력하면 반복을 멈추고 장치들의 상태 출력
-	static RegisteredDevices devices;
-	
-	public static void main(String[] args) {
-		// 여기에 IOTA 프로그래밍 하는 것 처럼 프로그래밍 한다.
-		/*eval은 현재 메인 스레드와 별개의 스레드로 따로 작동하게 해야겠다.
-		eval.setDaemon(true);
-		eval.start();
-		 */
+public class IotaMain { 
+	private RegisteredDevices devices;
+
+	public static void main(String[] args) throws InterruptedException {
 		Scanner input = new Scanner(System.in);
+		IotaMain main = new IotaMain();
+		main.devices = new RegisteredDevices();
 		
-		Door entranceDoor = new Door("EntranceDoor", "Locked"); //장치명, 초기 속성값
-		Door kitchenDoor = new Door("KitchenDoor", "Locked");
-		MotionSensor porchMotionSensor = new MotionSensor("PorchMotionSensor", "Off");
-		HallwayLight hallwayLight = new HallwayLight("HallwayLight1", "Off");
-		
-		devices = new RegisteredDevices();
-		devices.AddDevice(entranceDoor);
-		devices.AddDevice(kitchenDoor);
-		devices.AddDevice(porchMotionSensor);
-		devices.AddDevice(hallwayLight);
-		
-		//Predicate 확인
-		CompPredicate cp1 = new CompPredicate(devices.GetDevice("EntranceDoor"), "Field", 1, "Locked"); // predicate 작동 확인
-		CompPredicate cp2 = new CompPredicate(devices.GetDevice("PorchMotionSensor"), "Field", 1, "On");
-		LogicalPredicate cp3 = new LogicalPredicate(cp1, 2, cp2);
-		LogicalPredicate cp4 = new LogicalPredicate(3, cp2);
-		ConstPredicate cp5 = new ConstPredicate(false);
-		
-		System.out.println("Predicate 확인 ------------------------");
-		System.out.println(cp1.CheckPredicate());
-		System.out.println(cp2.CheckPredicate());
-		System.out.println(cp3.CheckPredicate());
-		System.out.println(cp4.CheckPredicate());
-		System.out.println(cp5.CheckPredicate());
-		System.out.println("------------------------");
-		
-		//Action 확인
-		System.out.println("Action 확인 ------------------------");
-		Action action1 = new Action(kitchenDoor, "UnLocked");
-		action1.PerformAction();
-		System.out.println(devices.GetDevice("KitchenDoor").GetCurrentState());
-		
-		Action action2 = new Action(kitchenDoor, "Locked");
-		Action action3 = new Action(porchMotionSensor, "On");
-		Actions actions1 = new Actions();
-		actions1.addAction(action2);
-		actions1.addAction(action3);
-		actions1.PerformActions();
-		System.out.println(devices.GetDevice("KitchenDoor").GetCurrentState());
-		System.out.println(devices.GetDevice("PorchMotionSensor").GetCurrentState());
-		System.out.println("------------------------");
-		
+		/*
+		Event e1 = Event.From(main.devices.GetDevice("EntranceDoor")
+				.GetEventElement("Lock"), "Locked");
+		CompPredicate p1 = CompPredicate.CompEqual(main.devices
+				.GetDevice("EntranceDoor"), "Lock", "UnLocked");
+		OneAction a1 = new OneAction(main.devices
+				.GetDevice("HallwayLight"), "Switch", "On");
+		Rule rule1 = new Rule(e1, p1, a1);
+
+		RuleSet ruleset = new RuleSet();
+		ruleset.add(rule1);
+		Evaluation eval = new Evaluation(ruleset);
+		*/
+
+		Event e1 = Event.From(main.devices
+				.GetDevice("EntranceDoor")
+				.GetEventElement("Lock"), "UnLocked");
+		CompPredicate p1 = CompPredicate.CompEqual(main.devices
+				.GetDevice("EntranceDoor"), "Lock", "Locked");
+		TimerAction a1 = TimerAction.TimerStart(main.devices
+				.GetDevice("HallwayLight"));
+		Rule rule1 = new Rule(e1, p1, a1);
+
+		Event e2 = Event.UnConditional(main.devices
+				.GetDevice("HallwayLight")
+				.GetEventElement("Timer"));
+		CompPredicate p2 = CompPredicate.CompEqual(main.devices
+				.GetDevice("HallwayLight"), "Timer", "5");
+		OneAction a21 = new OneAction(main.devices
+				.GetDevice("HallwayLight"), "Switch", "Off");
+		TimerAction a22 = TimerAction.TimerStop(main.devices
+				.GetDevice("HallwayLight"));
+		AnyActions as2 = new AnyActions();
+		as2.addAction(a21);
+		as2.addAction(a22);
+		Rule rule2 = new Rule(e2, p2, as2);
+
+		RuleSet ruleset = new RuleSet();
+		ruleset.add(rule1);
+		ruleset.add(rule2);
+		Evaluation eval = new Evaluation(ruleset);
+
 		while(true) {
-			for(String devName : devices.GetDeviceMapList()) {
-				System.out.println(devName + " : " + devices.GetDevice(devName).GetCurrentState());
-			} 
+			DeviceStatePrinter.print(main.devices);
 			
 			System.out.print("Device: ");
 			String device = input.nextLine();
@@ -64,25 +59,38 @@ public class IotaMain { //3개의 장치만 사용하고 있다는 가정 하에 simulation, 콘�
 				System.out.println("IOTA가 종료 되었습니다.");
 				break;
 			}
- 
-			System.out.print("State: "); // 바꿀 값이 Filed인지 Timer인지
+
+			System.out.print("Field: "); 
+			String field = input.nextLine();
+
+			System.out.print("State: "); // 
 			String state = input.nextLine();
 
-			EventTrigger(device, state);
-			// 스레드의 흐름이 IOTA 방식으로 프로그래밍 한 것을 Evaluation 하는 것을 반복하는 스레드는 계속 돌면서 장치의 상태를 입력하는 스레드를 보다가 장치입력이 들어오면,
-			// 즉, 여기서 장치의 상태를 변경하면 Evaluation을 반복하는 스레드는 그것을 반영하고 다시 Evaluation을 수행한다.
+			main.EventTrigger(device, field, state);
+			eval.Evaluate(main.devices);
 		}
 	}
 
 	public IotaMain() {
+
 	}
-	public static void EventTrigger(String devName, String state) throws RuntimeException {
+	public void EventTrigger(String devName, String field, String state) throws RuntimeException {
 		if(!devices.IsRegisteredDevice(devName)) //등록된 장치인지 확인
 			throw new RuntimeException(devName + "는 등록된 장치명이 아닙니다. 장치명을 다시 확인해 주세요.");
-		else if(!devices.GetDeviceProperty(devName).IsRegisteredProperty(state)) //등록된 property 값을 입력했는지 확인
-			throw new RuntimeException(state + "는 장치에 등록된 속성 값이 아닙니다. 속성 값을 다시 확인해 주세요.");
-		
-		//여기까지 오면 등록된 장치의 등록된 property를 바꾸는게 된다.
-		devices.GetDevice(devName).DeviceFieldChange(state);
+		if(!field.equals("Timer")) {
+			if(!devices.GetDeviceProperty(devName).IsRegisteredProperty(field)) //등록된 property 값을 입력했는지 확인
+				throw new RuntimeException(field + "는 장치에 등록된 속성이 아닙니다. 속성을 다시 확인해 주세요.");
+			if(!devices.GetDeviceProperty(devName).IsRegisteredPropertyState(field, state)) //등록된 property 값을 입력했는지 확인
+				throw new RuntimeException(state + "는 장치에 등록된 속성 값이 아닙니다. 속성 값을 다시 확인해 주세요.");
+			//여기까지 오면 등록된 장치의 등록된 property를 바꾸는게 된다.
+			//여기서 이제 기존에는 필드를 하나만 갖고 있는 거로 생각해서 그냥 device에 필드 1개만 있었지만
+			//여러개 필드가 있는걸로 해야하기 때문에 device에 HashMap(String fieldName, Field f)를 만들어서
+			//여러개 필드를 각 장치마다 필요하면 추가하고 필드 값을 바꾸는 것도 그 장치의 필드 중 특정 필드를 선택해서 그
+			//값을 변경하도록 하고, 이벤트에서 발생했는지 체크 할때도 장치의 특정 필드를 선택해 그것의 값이 바꼇는지 체크하게 하자.
+			devices.GetDevice(devName).DeviceFieldChange(field, state);
+		}
+		else {
+			devices.GetDevice(devName).SetVirtualTime(state);
+		}
 	}
 }

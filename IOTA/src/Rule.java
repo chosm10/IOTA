@@ -5,7 +5,7 @@ public class Rule {
 	Action action;
 	
 	public Rule(Event event, Predicate predicate, Action action) {
-		
+		this.event = event;
 		this.predicate = predicate;
 		this.action = action;
 	}
