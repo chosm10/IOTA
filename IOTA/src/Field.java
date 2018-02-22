@@ -18,7 +18,7 @@ public class Field implements EventElement{
 		this.old_value = current_value;
 		this.current_value = changedValue;
 	}
-	public static boolean IsStringDouble(String value) {
+	public boolean IsStringDouble(String value) {
 		try {
 			Double.parseDouble(value);
 			return true;

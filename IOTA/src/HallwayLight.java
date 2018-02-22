@@ -1,8 +1,12 @@
+import java.util.ArrayList;
 
 public class HallwayLight extends Device{
-	public HallwayLight(String n) {
-		super(n);
-		property.AddPropertyValue("On");
-		property.AddPropertyValue("Off");
+	public HallwayLight(String devName) {
+		super(devName);
+		ArrayList<String> switches = new ArrayList<>();
+		switches.add("On");
+		switches.add("Off");
+		property.AddProperty("Switch", switches);
+		AddUsingField("Switch");
 	}
 }

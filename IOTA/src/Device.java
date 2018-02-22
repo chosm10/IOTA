@@ -1,33 +1,75 @@
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Device {
 	protected Property property;   // 장치의 On, Off 같은 것을 리스트에 관리한다.(On->5 같은 에러를 막기 위해 사용)
-	protected Field f;
+	protected String devName; // Door1, Door2 같은 장치의 이름
 	protected Timer m;
-	
-	public Device(String n) {
-		this.f = new Field(n);
+	protected HashMap<String, Field> fields;
+	protected ArrayList<String> fieldList; // 맵 반복을 위해 존재
+
+	public Device(String devName) {
+		m = new Timer();
+		this.devName = devName;
 		this.property = new Property();
+		fields = new HashMap<>();
+		fieldList = new ArrayList<>();
+	}
+	public void AddUsingField(String fieldName) throws RuntimeException { // Property는 사용 가능한 속성들이고, Field는 실제 사용하는 것들
+		if(!this.property.IsRegisteredProperty(fieldName))
+			throw new RuntimeException(fieldName + "은 사용 가능한 필드가 아닙니다. 장치의 Property를 확인하세요.");
+		//필드 맵에 property의 맵에서 fieldName으로 property를 찾고, 그것에 첫번째로 등록된 value를 주어 필드를 생성한다.
+		fields.put(fieldName, new Field(property.GetProperties().get(fieldName).get(0)));
+		fieldList.add(fieldName);
+	}
+
+	public ArrayList<String> GetFieldList() {
+		return this.fieldList;
 	}
 	public Property GetProperty() {
 		return this.property;
 	}
-	public void SetTimer(int time) {
-		this.m = new Timer(time);
-		this.m.Start(time);
+	public String GetDevName() { //장치의 이름을 얻는 메소드
+		return this.devName;
 	}
-	public void StopTimer(int time) {
-		this.m.Stop(time);
+	public EventElement GetEventElement(String element)throws RuntimeException { 
+		switch(element) {
+		case "Timer" :
+			return this.m;
+		default:
+			if(!fields.containsKey(element))
+				throw new RuntimeException(element + "는 이 장치에 생성되지 않았습니다.");
+			return this.fields.get(element);
+		}
 	}
-	public String GetCurrentState() throws NotInitializeException {
-		if(this.f == null) {
+	public void DeviceFieldChange(String fieldName, String changedValue) {
+		fields.get(fieldName).FieldChange(changedValue);
+	}
+	public void SetTimer() { // start timer at time
+		this.m.StartTime();
+	}
+	public void StopTimer() { //stop timer
+		this.m.StopTime();
+	}
+	public void SetVirtualTimer() {
+		this.m.SetVirtualTime();
+	}
+	public void StopVirtualTimer() { //stop timer
+		this.m.StopVirtualTime();
+	}
+	public String GetCurrentState(String fieldName) throws NotInitializeException {
+		if(this.fields.get(fieldName) == null) {
 			throw new NotInitializeException("필드 값이 초기화 되지 않았습니다.");// lock 필드의 값이 초기화 안 됬는데 사용하려고 하면 에러
 		}
-		return this.f.GetCurrentValue();
+		return this.fields.get(fieldName).GetCurrentValue();
 	}
 	public Timer GetTimer() throws NotInitializeException {
 		if(m == null) {
 			throw new NotInitializeException("타이머가 초기화 되지 않았습니다.");// m 필드의 값이 초기화 안 됬는데 사용하려고 하면 에러
 		}
 		return this.m;
+	}
+	public void SetVirtualTime(String virtualTime) {
+		this.m.ChangeVirtualTime(Integer.valueOf(virtualTime));
 	}
 }
