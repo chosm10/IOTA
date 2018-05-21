@@ -15,7 +15,7 @@ public class DeviceStatePrinter {
 		System.out.println("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
 		for (String devName : devices.GetDeviceMapList()) {
 			for (String fieldName : devices.GetDevice(devName).GetFieldList())
-				System.out.println("           " + devName + "\t      " + fieldName + "\t: "
+				System.out.println("      " + devName + "\t      " + fieldName + "\t: "
 						+ devices.GetDevice(devName).GetCurrentState(fieldName));
 
 			if (devName.equals(devices.GetDeviceMapList().get(devices.GetDeviceMapList().size() - 1))) {
@@ -24,7 +24,6 @@ public class DeviceStatePrinter {
 			} else
 				System.out.println("-----------------------------------------------------------------------");
 		}
-		//System.out.println("");
 
 	}
 }
