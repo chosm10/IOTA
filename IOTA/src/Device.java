@@ -2,74 +2,55 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Device {
-	protected Property property;   // ÀåÄ¡ÀÇ On, Off °°Àº °ÍÀ» ¸®½ºÆ®¿¡ °ü¸®ÇÑ´Ù.(On->5 °°Àº ¿¡·¯¸¦ ¸·±â À§ÇØ »ç¿ë)
-	protected String devName; // Door1, Door2 °°Àº ÀåÄ¡ÀÇ ÀÌ¸§
-	protected Timer m;
+	protected Property property; // ì¥ì¹˜ì˜ On, Off ê°™ì€ ê²ƒì„ ë¦¬ìŠ¤íŠ¸ì— ê´€ë¦¬í•œë‹¤.(On->5 ê°™ì€ ì—ëŸ¬ë¥¼ ë§‰ê¸° ìœ„í•´ ì‚¬ìš©)
+	protected String devName; // Door1, Door2 ê°™ì€ ì¥ì¹˜ì˜ ì´ë¦„
 	protected HashMap<String, Field> fields;
-	protected ArrayList<String> fieldList; // ¸Ê ¹İº¹À» À§ÇØ Á¸Àç
+	protected ArrayList<String> fieldList; // ë§µ ë°˜ë³µì„ ìœ„í•´ ì¡´ì¬
 
 	public Device(String devName) {
-		m = new Timer();
+
 		this.devName = devName;
 		this.property = new Property();
 		fields = new HashMap<>();
 		fieldList = new ArrayList<>();
 	}
-	public void AddUsingField(String fieldName) throws RuntimeException { // Property´Â »ç¿ë °¡´ÉÇÑ ¼Ó¼ºµéÀÌ°í, Field´Â ½ÇÁ¦ »ç¿ëÇÏ´Â °Íµé
-		if(!this.property.IsRegisteredProperty(fieldName))
-			throw new RuntimeException(fieldName + "Àº »ç¿ë °¡´ÉÇÑ ÇÊµå°¡ ¾Æ´Õ´Ï´Ù. ÀåÄ¡ÀÇ Property¸¦ È®ÀÎÇÏ¼¼¿ä.");
-		//ÇÊµå ¸Ê¿¡ propertyÀÇ ¸Ê¿¡¼­ fieldNameÀ¸·Î property¸¦ Ã£°í, ±×°Í¿¡ Ã¹¹øÂ°·Î µî·ÏµÈ value¸¦ ÁÖ¾î ÇÊµå¸¦ »ı¼ºÇÑ´Ù.
-		fields.put(fieldName, new Field(property.GetProperties().get(fieldName).get(0)));
+
+	public void AddUsingField(String fieldName) throws RuntimeException { // PropertyëŠ” ì‚¬ìš© ê°€ëŠ¥í•œ ì†ì„±ë“¤ì´ê³ , FieldëŠ” ì‹¤ì œ ì‚¬ìš©í•˜ëŠ” ê²ƒë“¤
+		if (!this.property.IsRegisteredProperty(fieldName))
+			throw new RuntimeException(fieldName + "ì€ ì‚¬ìš© ê°€ëŠ¥í•œ í•„ë“œê°€ ì•„ë‹™ë‹ˆë‹¤. ì¥ì¹˜ì˜ Propertyë¥¼ í™•ì¸í•˜ì„¸ìš”.");
+		// í•„ë“œ ë§µì— propertyì˜ ë§µì—ì„œ fieldNameìœ¼ë¡œ propertyë¥¼ ì°¾ê³ , ê·¸ê²ƒì— ì²«ë²ˆì§¸ë¡œ ë“±ë¡ëœ valueë¥¼ ì£¼ì–´ í•„ë“œë¥¼
+		// ìƒì„±í•œë‹¤.
+		fields.put(fieldName, new Field(property.GetProperties().get(fieldName).get(0), fieldName, this.GetDevName()));
 		fieldList.add(fieldName);
 	}
 
 	public ArrayList<String> GetFieldList() {
 		return this.fieldList;
 	}
+
 	public Property GetProperty() {
 		return this.property;
 	}
-	public String GetDevName() { //ÀåÄ¡ÀÇ ÀÌ¸§À» ¾ò´Â ¸Ş¼Òµå
+
+	public String GetDevName() { // ì¥ì¹˜ì˜ ì´ë¦„ì„ ì–»ëŠ” ë©”ì†Œë“œ
 		return this.devName;
 	}
-	public EventElement GetEventElement(String element)throws RuntimeException { 
-		switch(element) {
-		case "Timer" :
-			return this.m;
-		default:
-			if(!fields.containsKey(element))
-				throw new RuntimeException(element + "´Â ÀÌ ÀåÄ¡¿¡ »ı¼ºµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
-			return this.fields.get(element);
-		}
+
+	public EventElement GetEventElement(String element) throws RuntimeException {
+
+		if (!fields.containsKey(element))
+			throw new RuntimeException(element + "ëŠ” ì´ ì¥ì¹˜ì— ìƒì„±ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
+		return this.fields.get(element);
 	}
+
 	public void DeviceFieldChange(String fieldName, String changedValue) {
 		fields.get(fieldName).FieldChange(changedValue);
 	}
-	public void SetTimer() { // start timer at time
-		this.m.StartTime();
-	}
-	public void StopTimer() { //stop timer
-		this.m.StopTime();
-	}
-	public void SetVirtualTimer() {
-		this.m.SetVirtualTime();
-	}
-	public void StopVirtualTimer() { //stop timer
-		this.m.StopVirtualTime();
-	}
+
 	public String GetCurrentState(String fieldName) throws NotInitializeException {
-		if(this.fields.get(fieldName) == null) {
-			throw new NotInitializeException("ÇÊµå °ªÀÌ ÃÊ±âÈ­ µÇÁö ¾Ê¾Ò½À´Ï´Ù.");// lock ÇÊµåÀÇ °ªÀÌ ÃÊ±âÈ­ ¾È ‰ç´Âµ¥ »ç¿ëÇÏ·Á°í ÇÏ¸é ¿¡·¯
+		if (this.fields.get(fieldName) == null) {
+			throw new NotInitializeException("í•„ë“œ ê°’ì´ ì´ˆê¸°í™” ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");// lock í•„ë“œì˜ ê°’ì´ ì´ˆê¸°í™” ì•ˆ ë¬ëŠ”ë° ì‚¬ìš©í•˜ë ¤ê³  í•˜ë©´ ì—ëŸ¬
 		}
 		return this.fields.get(fieldName).GetCurrentValue();
-	}
-	public Timer GetTimer() throws NotInitializeException {
-		if(m == null) {
-			throw new NotInitializeException("Å¸ÀÌ¸Ó°¡ ÃÊ±âÈ­ µÇÁö ¾Ê¾Ò½À´Ï´Ù.");// m ÇÊµåÀÇ °ªÀÌ ÃÊ±âÈ­ ¾È ‰ç´Âµ¥ »ç¿ëÇÏ·Á°í ÇÏ¸é ¿¡·¯
-		}
-		return this.m;
-	}
-	public void SetVirtualTime(String virtualTime) {
-		this.m.ChangeVirtualTime(Integer.valueOf(virtualTime));
 	}
 }

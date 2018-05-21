@@ -1,15 +1,16 @@
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 public class RegisteredDevices {
-	HashMap<String, Device> deviceMap; //ÀåÄ¡ÀÇ ÀÌ¸§À» key·Î value¸¦ ÀåÄ¡·Î ÇÑ´Ù.
-	ArrayList<String> deviceMapList; // ÀåÄ¡¸í(key)À» °ü¸®ÇÏ´Â list, ÇØ½Ã¸ÊÀ» ¹İº¹ÇÏ´Âµ¥ »ç¿ë
+	HashMap<String, Device> deviceMap; //ì¥ì¹˜ì˜ ì´ë¦„ì„ keyë¡œ valueë¥¼ ì¥ì¹˜ë¡œ í•œë‹¤.
+	ArrayList<String> deviceMapList; // ì¥ì¹˜ëª…(key)ì„ ê´€ë¦¬í•˜ëŠ” list, í•´ì‹œë§µì„ ë°˜ë³µí•˜ëŠ”ë° ì‚¬ìš©
 	
 	public RegisteredDevices() {
 		deviceMap = new HashMap<>();
 		deviceMapList = new ArrayList<>();
 		
-		Door entranceDoor = new Door("EntranceDoor"); //ÀåÄ¡¸í, ÃÊ±â ¼Ó¼º°ª
+		Door entranceDoor = new Door("EntranceDoor"); //ì¥ì¹˜ëª…, ì´ˆê¸° ì†ì„±ê°’
 		Door kitchenDoor = new Door("KitchenDoor");
 		MotionSensor porchMotionSensor = new MotionSensor("PorchMotionSensor");
 		HallwayLight hallwayLight = new HallwayLight("HallwayLight");
@@ -19,24 +20,25 @@ public class RegisteredDevices {
 		AddDevice(porchMotionSensor);
 		AddDevice(hallwayLight);
 	}
-	public void AddDevice(Device device) {   // »ç¿ëÇÒ ÀåÄ¡¸¦ µî·ÏÇÑ´Ù.
+	public void AddDevice(Device device) {   // ì‚¬ìš©í•  ì¥ì¹˜ë¥¼ ë“±ë¡í•œë‹¤.
 		deviceMap.put(device.GetDevName(), device);
 		deviceMapList.add(device.GetDevName());
 	}
-	public void DeleteDevice(String devName) {  // ÀåÄ¡ÀÇ µî·ÏÀ» ÇØÁ¦ÇÑ´Ù.
+	public void DeleteDevice(String devName) {  // ì¥ì¹˜ì˜ ë“±ë¡ì„ í•´ì œí•œë‹¤.
 		deviceMap.remove(devName);
 		deviceMapList.remove(devName);
 	}
-	public Device GetDevice(String devName) {  // ÀåÄ¡ÀÇ ÀÌ¸§À¸·Î ÀåÄ¡¸¦ °¡Á®¿Â´Ù.
+	public Device GetDevice(String devName) {  // ì¥ì¹˜ì˜ ì´ë¦„ìœ¼ë¡œ ì¥ì¹˜ë¥¼ ê°€ì ¸ì˜¨ë‹¤.
 		return this.deviceMap.get(devName);
 	}
-	public Property GetDeviceProperty(String devName) {  //ÀåÄ¡ÀÇ ÀÌ¸§À¸·Î ÀåÄ¡ÀÇ Property¸¦ °¡Á®¿Â´Ù.
+	public Property GetDeviceProperty(String devName) {  //ì¥ì¹˜ì˜ ì´ë¦„ìœ¼ë¡œ ì¥ì¹˜ì˜ Propertyë¥¼ ê°€ì ¸ì˜¨ë‹¤.
 		return this.deviceMap.get(devName).GetProperty();
 	}
-	public ArrayList<String> GetDeviceMapList() {   // µî·ÏµÈ ÀåÄ¡ÀÇ ¸ÊÀ» ¹İº¹ÇÏ´Âµ¥ »ç¿ëÇÑ´Ù.
+	public ArrayList<String> GetDeviceMapList() {   // ë“±ë¡ëœ ì¥ì¹˜ì˜ ë§µì„ ë°˜ë³µí•˜ëŠ”ë° ì‚¬ìš©í•œë‹¤.
 		return this.deviceMapList;
 	}
-	public boolean IsRegisteredDevice(String devName) {   //ÀåÄ¡ÀÇ ÀÌ¸§À¸·Î µî·ÏµÇ ÀÖ´ÂÁö È®ÀÎÇÑ´Ù.
+	public boolean IsRegisteredDevice(String devName) {   //ì¥ì¹˜ì˜ ì´ë¦„ìœ¼ë¡œ ë“±ë¡ë˜ ìˆëŠ”ì§€ í™•ì¸í•œë‹¤.
 		return deviceMap.containsKey(devName);
 	}
 }
+

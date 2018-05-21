@@ -1,26 +1,61 @@
 
+import java.util.ArrayList;
+
 public class OneAction implements Action {
 	protected Device device;
 	protected String field;
 	protected String action;
+	protected String ActionName;
+	protected boolean ActionComplete = false;
 	
 	public OneAction(Device device, String field, String action) throws RuntimeException {  
 		if(!device.GetProperty().IsRegisteredProperty(field))
-			throw new RuntimeException(field + " : µî·ÏµÇÁö ¾ÊÀº  ÇÊµå·Î´Â º¯°æ ÇÒ ¼ö ¾ø½À´Ï´Ù.");
+			throw new RuntimeException(field + " : ë“±ë¡ë˜ì§€ ì•Šì€  í•„ë“œë¡œëŠ” ë³€ê²½ í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
 		else if(!device.GetProperty().IsRegisteredPropertyState(field, action))
-			throw new RuntimeException(action + " : µî·ÏµÇÁö ¾ÊÀº  ¼Ó¼º °ªÀ¸·Î´Â º¯°æ ÇÒ ¼ö ¾ø½À´Ï´Ù.");
+			throw new RuntimeException(action + " : ë“±ë¡ë˜ì§€ ì•Šì€  ì†ì„± ê°’ìœ¼ë¡œëŠ” ë³€ê²½ í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
 		this.device = device;	
 		this.field = field;
 		this.action = action;
+		this.ActionName = this.device.GetDevName() +" " + this.field +" " + this.device.GetEventElement(field).GetCurrentValue() 
+				+  " >> " + this.action;
 	}
-	//GetActionDevice(), GetActionValue()´Â Actions¿¡¼­ ¿©·¯ ¾×¼ÇÀ» ÇÑ¹ø¿¡ ¼öÇà ÇÒ ¶§ »ç¿ëÇÑ´Ù.
+	//GetActionDevice(), GetActionValue()ëŠ” Actionsì—ì„œ ì—¬ëŸ¬ ì•¡ì…˜ì„ í•œë²ˆì— ìˆ˜í–‰ í•  ë•Œ ì‚¬ìš©í•œë‹¤.
 	public Device GetActionDevice() {
 		return this.device;
 	}
 	public String GetActionValue() {
 		return this.action;
 	}
-	public void PerformAction() { 
-		this.device.DeviceFieldChange(this.field, this.action);
+	public void PerformAction() {
+		if(!this.device.GetEventElement(this.field).GetCurrentValue().equals(action)) {
+			this.device.DeviceFieldChange(this.field, action);
+			ActionComplete = true;			
+			System.out.println(this.ActionName());
+			TimeLog.actionLog.add(IotaMain.time.TimeToString + " " +this.ActionName()+ " ");
+		}
+		else
+			ActionComplete = false;
 	}
+	@Override
+	public String ActionType() {
+		// TODO Auto-generated method stub
+		return "Normal";
+	}
+	@Override
+	public boolean ActionComplete() {
+		// TODO Auto-generated method stub
+		return this.ActionComplete;
+	}
+	public String ActionName() {
+		this.ActionName = this.device.GetDevName() +" " + this.field +" " + this.device.GetEventElement(field).GetOldValue() 
+				+  " >> " + this.action;
+		return this.ActionName;
+		
+	}
+	@Override
+	public ArrayList<Action> ForAnyAction() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

@@ -1,4 +1,3 @@
-
 public class CompPredicate implements Predicate {
 	public static final int EQUAL = 1; // =
 	public static final int LESS_THAN = 2; // <
@@ -6,46 +5,39 @@ public class CompPredicate implements Predicate {
 	private int op;
 	private Device device;
 
-	public CompPredicate(Device device, String oprnd1, int op, String oprnd2) throws RuntimeException {   //oprnd1Àº ÇÊµå³ª Å¸ÀÌ¸Ó, oprnd2´Â ÇÊµå³ª »ó¼ö
-		if((!device.GetProperty().IsRegisteredProperty(oprnd1)) && (oprnd1 != "Timer"))
-			throw new RuntimeException(oprnd1 + "Àº µî·ÏµÈ Field³ª Timer¿©¾ß ÇÕ´Ï´Ù.");
-		else if((op != LESS_THAN) && (op != EQUAL))
-			throw new RuntimeException(op + "´Â µî·ÏµÈ ¿¬»êÀÚ°¡ ¾Æ´Õ´Ï´Ù. 1: =, 2: < Áß ÇÏ³ª¸¦ »ç¿ëÇÏ¼¼¿ä.");
+	public CompPredicate(Device device, String oprnd1, int op, String oprnd2) throws RuntimeException { // oprnd1ì€ í•„ë“œë‚˜
+																										// íƒ€ì´ë¨¸, oprnd2ëŠ”
+																										// í•„ë“œë‚˜ ìƒìˆ˜
+		if ((!device.GetProperty().IsRegisteredProperty(oprnd1)) && (oprnd1 != "Timer"))
+			throw new RuntimeException(oprnd1 + "ì€ ë“±ë¡ëœ Fieldë‚˜ Timerì—¬ì•¼ í•©ë‹ˆë‹¤.");
+		else if ((op != LESS_THAN) && (op != EQUAL))
+			throw new RuntimeException(op + "ëŠ” ë“±ë¡ëœ ì—°ì‚°ìžê°€ ì•„ë‹™ë‹ˆë‹¤. 1: =, 2: < ì¤‘ í•˜ë‚˜ë¥¼ ì‚¬ìš©í•˜ì„¸ìš”.");
 
-		if(!oprnd1.equals("Timer")) {
-			if(!(device.GetProperty().IsRegisteredPropertyState(oprnd1, oprnd2) || device.GetEventElement(oprnd1).IsStringDouble(oprnd2)))
-				throw new RuntimeException(oprnd2 + "´Â ÀåÄ¡¿¡ µî·ÏµÈ Property³ª »ó¼ö¿©¾ß ÇÕ´Ï´Ù.");
+		if (!oprnd1.equals("Timer")) {
+			if (!(device.GetProperty().IsRegisteredPropertyState(oprnd1, oprnd2)
+					|| device.GetEventElement(oprnd1).IsStringDouble(oprnd2)))
+				throw new RuntimeException(oprnd2 + "ëŠ” ìž¥ì¹˜ì— ë“±ë¡ëœ Propertyë‚˜ ìƒìˆ˜ì—¬ì•¼ í•©ë‹ˆë‹¤.");
 		}
 		this.device = device;
 		this.oprnd1 = oprnd1;
 		this.op = op;
 		this.oprnd2 = oprnd2;
 	}
+
 	public static CompPredicate CompEqual(Device device, String oprnd1, String oprnd2) {
 		return new CompPredicate(device, oprnd1, CompPredicate.EQUAL, oprnd2);
 	}
+
 	public static CompPredicate CompLess(Device device, String oprnd1, String oprnd2) {
 		return new CompPredicate(device, oprnd1, CompPredicate.LESS_THAN, oprnd2);
 	}
-	public boolean CheckPredicate() { 
-		String currentElementValue = device.GetEventElement(oprnd1).GetCurrentValue(); //oprand1ÀÇ ÇöÀç °ª
-		switch(op) {
-		case 1 :
-			if(oprnd1.equals("Timer")) {
-				/*
-				if(this.device.GetTimer().IsVirtualTimerStart() && this.device.GetTimer().IsTimePassed(Integer.valueOf(oprnd2))) {
-					return true;
-				}
-				*/
-				if(this.device.GetTimer().IsVirtualTimerStart() && this.device.GetTimer().IsVirtualTimePassed(Integer.valueOf(oprnd2))) {
-					return true;
-				}
-				else
-					return false;
-			}
-			else
-				return currentElementValue.equals(oprnd2);
-		case 2 :
+
+	public boolean CheckPredicate() {
+		String currentElementValue = device.GetEventElement(oprnd1).GetCurrentValue(); // oprand1ì˜ í˜„ìž¬ ê°’
+		switch (op) {
+		case 1:
+			return currentElementValue.equals(oprnd2);
+		case 2:
 			return Double.parseDouble(currentElementValue) < Double.parseDouble(oprnd2);
 		}
 		return false;

@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 
 public class MotionSensor extends Device{
@@ -7,6 +8,6 @@ public class MotionSensor extends Device{
 		switches.add("On");
 		switches.add("Off");
 		property.AddProperty("Switch", switches);
-		AddUsingField("Switch"); // ¿©·¯ »ç¿ë°¡´ÉÇÑ propertyÁß Switch¸¸ »ç¿ëÇÑ´Ù.
+		AddUsingField("Switch"); // ì—¬ëŸ¬ ì‚¬ìš©ê°€ëŠ¥í•œ propertyì¤‘ Switchë§Œ ì‚¬ìš©í•œë‹¤.
 	}
 }

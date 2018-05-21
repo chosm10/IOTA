@@ -7,15 +7,15 @@ public class LogicalPredicate implements Predicate {
 	private int op;
 	private Predicate predicate2;
 
-	public LogicalPredicate(int op, Predicate predicate1) throws RuntimeException { //NOT ÀÏ¶§ »ç¿ë
+	public LogicalPredicate(int op, Predicate predicate1) throws RuntimeException { //NOT ì¼ë•Œ ì‚¬ìš©
 		if(op != 3)
-			throw new RuntimeException(op + "´Â Àß¸øµÈ ¿¬»ê ¹øÈ£ ÀÔ´Ï´Ù: NOT ¿¬»êÀÇ ¿¬»ê ¹øÈ£´Â 3ÀÔ´Ï´Ù.");
+			throw new RuntimeException(op + "ëŠ” ì˜ëª»ëœ ì—°ì‚° ë²ˆí˜¸ ì…ë‹ˆë‹¤: NOT ì—°ì‚°ì˜ ì—°ì‚° ë²ˆí˜¸ëŠ” 3ì…ë‹ˆë‹¤.");
 		this.op = op;
 		this.predicate1 = predicate1;
 	}
 	public LogicalPredicate(Predicate predicate1, int op, Predicate predicate2) throws RuntimeException {
 		if((op != 1) && (op != 2))
-			throw new RuntimeException(op + "´Â Àß¸øµÈ ¿¬»ê ¹øÈ£ ÀÔ´Ï´Ù: AND ¿¬»êÀÇ ¿¬»ê ¹øÈ£´Â 1, ORÀº 2ÀÔ´Ï´Ù.");
+			throw new RuntimeException(op + "ëŠ” ì˜ëª»ëœ ì—°ì‚° ë²ˆí˜¸ ì…ë‹ˆë‹¤: AND ì—°ì‚°ì˜ ì—°ì‚° ë²ˆí˜¸ëŠ” 1, ORì€ 2ì…ë‹ˆë‹¤.");
 		this.predicate1 = predicate1;
 		this.op = op;
 		this.predicate2 = predicate2;
@@ -27,7 +27,7 @@ public class LogicalPredicate implements Predicate {
 		case 2 :
 			return predicate1.CheckPredicate() || predicate2.CheckPredicate();
 		case 3 :
-			return !predicate1.CheckPredicate();//NOT ¿¬»êÀ» »ç¿ë ÇÒ ¶§
+			return !predicate1.CheckPredicate();//NOT ì—°ì‚°ì„ ì‚¬ìš© í•  ë•Œ
 		}
 		return false;
 	}

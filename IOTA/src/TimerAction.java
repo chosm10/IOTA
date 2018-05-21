@@ -1,30 +1,74 @@
 
-public class TimerAction implements Action { 
-	// Stop m, Start m Ã³·³ Timer¸¦ ÀÛµ¿ÇÏ´Â Action
-	//±â´ÉÀº Timer Å¬·¡½º¿¡¼­ ¸Ş¼Òµå¸¦ °¡Á®´Ù »ç¿ëÇÏ¸é µÉ °Í °°´Ù.
-	private Device device;
-	private String action;
-	
-	public TimerAction(Device device, String action) throws RuntimeException { //actionÀº Start³ª Stop		
-		this.device = device;
-		this.action = action;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import javax.swing.plaf.synth.SynthStyleFactory;
+
+public class TimerAction implements Action { // ì•¡ì…˜ì„ ê°ì²´ë¡œ ë°›ì•„ íƒ€ì´ë¨¸ë¥¼ ì´ìš©í•œë‹¤.
+	Rule rule;
+	// Action action;
+	String timer;
+	String StartTime = "null";
+	String EndTime;
+	int count; // ì•¡ì…˜ì„ ëª‡ ë²ˆ ë°˜ë³µí•  ì§€ ì •í•˜ëŠ” ê°’
+
+	boolean TimerEnd = false; // íƒ€ì´ë¨¸ê°€ ëë‚¬ëŠ” ì§€ ì•Œ ìˆ˜ ìˆë‹¤.
+	boolean ActionComplete = false;
+
+	public TimerAction(Rule rule, String timer, int count) {
+		this.rule = rule;
+		this.timer = timer;
+		this.count = count;
 	}
-	public static TimerAction TimerStart(Device device) {
-		return new TimerAction(device, "Start");
+
+	public void setTimer() { // íƒ€ì´ë¨¸ê°€ ì‹œì‘ëœ ì‹œê°„ì„ ì €ì¥, ëë‚  ì‹œê°„ì„ ê³„ì‚°.
+		
+		this.StartTime = IotaMain.time.TimeToString;
+		this.EndTime = IotaMain.time.getEndTime(Integer.parseInt(timer));
+		this.TimerEnd = false; // íƒ€ì´ë¨¸ê°€ ì‹œì‘ë¨
 	}
-	public static TimerAction TimerStop(Device device) {
-		return new TimerAction(device, "Stop");
-	}
-	public void PerformAction() { 
-		switch(action) { // start timer at 0, ¹«Á¶°Ç 0¿¡¼­¸¸ ½ÃÀÛÇÑ´Ù´Â ÀüÁ¦·Î
-		case "Start" :
-			this.device.m.SetVirtualTime();
-			//this.device.m.StartTime();
-			break;
-		case "Stop" :
-			this.device.m.StopVirtualTime();
-			//this.device.m.StopTime();
-			break;
+
+	public void PerformAction() {
+		if (this.StartTime.equals("null")) { // íƒ€ì´ë¨¸ê°€ ì„¤ì •ë˜ì–´ ìˆì§€ ì•Šë‹¤ë©´ íƒ€ì´ë¨¸ ì„¤ì •
+			setTimer();
+			TimeLog.actionLog.add(IotaMain.time.TimeToString + " " + this.ActionName() + " íƒ€ì´ë¨¸ ì‹œì‘");
+			System.out.println(IotaMain.time.TimeToString + " " + this.ActionName() + " íƒ€ì´ë¨¸ ì‹œì‘");
+
+		}
+		if (IotaMain.time.TimeToString.equals(this.EndTime)) {
+			TimeLog.actionLog.add(IotaMain.time.TimeToString + " " + this.ActionName() + " íƒ€ì´ë¨¸ ì¢…ë£Œ");
+			if (this.rule.GetPredicate().CheckPredicate()) {
+				this.rule.GetAction().PerformAction();
+				
+				System.out.println("íƒ€ì´ë¨¸ ì´ë²¤íŠ¸ ì‹¤í–‰ì™„ë£Œ : " + this.EndTime + " " + this.rule.GetAction().ActionName());
+				
+			}
+			this.StartTime = "null";
+			this.TimerEnd = true; // íƒ€ì´ë¨¸ ì¢…ë£Œ
+
 		}
 	}
+
+	@Override
+	public String ActionType() {
+		// TODO Auto-generated method stub
+		return "Timer";
+	}
+
+	@Override
+	public boolean ActionComplete() {
+		// TODO Auto-generated method stub
+		return this.TimerEnd;
+	}
+
+	public String ActionName() {
+		return this.ActionType() + " " + this.rule.GetAction().ActionName();
+	}
+
+	@Override
+	public ArrayList<Action> ForAnyAction() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

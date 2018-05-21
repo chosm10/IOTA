@@ -1,16 +1,44 @@
 import java.util.ArrayList;
-public class AnyActions implements Action {  //ÇÑ¹ø¿¡ ¿©·¯ ¾×¼ÇµéÀ» ÇÏ°Ô ÇÏ´Â ¾×¼ÇµéÀ» °®°í ÀÖ°í ½ÇÇàÇÏ´Â Å¬·¡½º
+
+public class AnyActions implements Action { // í•œë²ˆì— ì—¬ëŸ¬ ì•¡ì…˜ë“¤ì„ í•˜ê²Œ í•˜ëŠ” ì•¡ì…˜ë“¤ì„ ê°–ê³  ìˆê³  ì‹¤í–‰í•˜ëŠ” í´ë˜ìŠ¤
 	ArrayList<Action> actions;
+	ArrayList<Boolean> actionsComplete;
 
 	public AnyActions() {
 		actions = new ArrayList<>();
+		actionsComplete = new ArrayList<>();
 	}
+
 	public void addAction(Action action) {
 		actions.add(action);
 	}
-	public void PerformAction() { 
-		for(Action action : this.actions) {
-			action.PerformAction();
-		}
+
+	@Override
+	public ArrayList<Action> ForAnyAction() {
+		// TODO Auto-generated method stub
+		return this.actions;
 	}
+	@Override
+	public String ActionType() {
+		// TODO Auto-generated method stub
+		return "AnyAction";
+	}
+
+	@Override
+	public boolean ActionComplete() {
+		return false;
+	}
+
+	public String ActionName() {
+		return actions.get(0).ActionName();
+	}
+
+	
+	@Override
+	public void PerformAction() {
+		for(Action ac: actions)
+			ac.PerformAction();
+		// TODO Auto-generated method stub
+	}
+
 }

@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,11 +15,11 @@ public class Property {
 		this.properties.put(property, values);
 	}
 	public boolean IsRegisteredProperty(String property) { 
-		//µî·ÏµÈ propertyÀÎÁö È®ÀÎÇÏ´Â ¸Ş¼Òµå ex)Lock, Switch ...
+		//ë“±ë¡ëœ propertyì¸ì§€ í™•ì¸í•˜ëŠ” ë©”ì†Œë“œ ex)Lock, Switch ...
 		return properties.containsKey(property);
 	}
 	public boolean IsRegisteredPropertyState(String property, String state) { 
-		//µî·ÏµÈ property °ªÀÎÁö È®ÀÎÇÏ´Â ¸Ş¼Òµå ex)Locked, UnLocked, On, Off ...
+		//ë“±ë¡ëœ property ê°’ì¸ì§€ í™•ì¸í•˜ëŠ” ë©”ì†Œë“œ ex)Locked, UnLocked, On, Off ...
 		return properties.get(property).contains(state);
 	}
 	

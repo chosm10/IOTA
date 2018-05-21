@@ -1,96 +1,152 @@
+
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
-public class IotaMain { 
-	private RegisteredDevices devices;
+public class IotaMain {
+	RegisteredDevices devices;
+	Evaluation eval;
+	static SystemTimeCheck time;
+	Scanner input;
 
 	public static void main(String[] args) throws InterruptedException {
-		Scanner input = new Scanner(System.in);
+		//Scanner input = new Scanner(System.in);
 		IotaMain main = new IotaMain();
 		main.devices = new RegisteredDevices();
+		main.input = new Scanner(System.in);
 		
-		/*
-		Event e1 = Event.From(main.devices.GetDevice("EntranceDoor")
-				.GetEventElement("Lock"), "Locked");
-		CompPredicate p1 = CompPredicate.CompEqual(main.devices
-				.GetDevice("EntranceDoor"), "Lock", "UnLocked");
-		OneAction a1 = new OneAction(main.devices
-				.GetDevice("HallwayLight"), "Switch", "On");
+///Rule 1
+		NormalEvent e1 = NormalEvent.From(main.devices.GetDevice("EntranceDoor").GetEventElement("Lock"), "Locked");
+		CompPredicate p1 = CompPredicate.CompEqual(main.devices.GetDevice("EntranceDoor"), "Lock", "UnLocked");
+		OneAction a1 = new OneAction(main.devices.GetDevice("HallwayLight"), "Switch", "Off");
 		Rule rule1 = new Rule(e1, p1, a1);
-
-		RuleSet ruleset = new RuleSet();
-		ruleset.add(rule1);
-		Evaluation eval = new Evaluation(ruleset);
-		*/
-
-		Event e1 = Event.From(main.devices
-				.GetDevice("EntranceDoor")
-				.GetEventElement("Lock"), "UnLocked");
-		CompPredicate p1 = CompPredicate.CompEqual(main.devices
-				.GetDevice("EntranceDoor"), "Lock", "Locked");
-		TimerAction a1 = TimerAction.TimerStart(main.devices
-				.GetDevice("HallwayLight"));
-		Rule rule1 = new Rule(e1, p1, a1);
-
-		Event e2 = Event.UnConditional(main.devices
-				.GetDevice("HallwayLight")
-				.GetEventElement("Timer"));
-		CompPredicate p2 = CompPredicate.CompEqual(main.devices
-				.GetDevice("HallwayLight"), "Timer", "5");
-		OneAction a21 = new OneAction(main.devices
-				.GetDevice("HallwayLight"), "Switch", "Off");
-		TimerAction a22 = TimerAction.TimerStop(main.devices
-				.GetDevice("HallwayLight"));
+///Rule 2
+		NormalEvent e2 = NormalEvent.FromTo(main.devices.GetDevice("HallwayLight").GetEventElement("Switch"), "On", "Off");
+		CompPredicate p2 = CompPredicate.CompEqual(main.devices.GetDevice("KitchenDoor"), "Lock", "Locked");
+		OneAction a21 = new OneAction(main.devices.GetDevice("KitchenDoor"), "Lock", "UnLocked");
 		AnyActions as2 = new AnyActions();
 		as2.addAction(a21);
-		as2.addAction(a22);
 		Rule rule2 = new Rule(e2, p2, as2);
-
+///Rule 3 for Timer
+		NormalEvent e3 = NormalEvent.From(main.devices.GetDevice("HallwayLight").GetEventElement("Switch"), "On");			//Event
+		CompPredicate p3 = CompPredicate.CompEqual(main.devices.GetDevice("EntranceDoor"), "Lock", "Locked");	//Condition
+		
+		CompPredicate p3timer = CompPredicate.CompEqual(main.devices.GetDevice("KitchenDoor"), "Switch", "On");	//TimerCondition
+		OneAction a3 = new OneAction(main.devices.GetDevice("KitchenDoor"), "Switch", "Off");					//TimerAction
+		OneAction a4 = new OneAction(main.devices.GetDevice("PorchMotionSensor"), "Switch", "Off");
+		AnyActions acs = new AnyActions();		//ì•¡ì…˜ì„ í•œë²ˆì— ì—¬ëŸ¬ê°œ ì‹¤í–‰.
+		acs.addAction(a3);
+		acs.addAction(a4);
+		Rule rule3Timer = new Rule(new NormalEvent(), new ConstPredicate(true), acs);									//TimerRuleSet
+		
+		TimerAction ta3 = new TimerAction(rule3Timer, "5", 3);														//TimerAction Set
+		
+		Rule rule3 = new Rule(e3, p3, ta3);																		//Rule 3 for Timer
+		
+///rule 4			ì§€ì • ì‹œê°„ ì´ë²¤íŠ¸		
+		TimerEvent te1 = new TimerEvent("10:14:00", 10, -1);	//Event
+		CompPredicate p4 = CompPredicate.CompEqual(main.devices.GetDevice("KitchenDoor"), "Switch", "On");	//Condition
+		
+	
+		OneAction a5 = new OneAction(main.devices.GetDevice("KitchenDoor"), "Switch", "Off");					//TimerAction
+		
+		CompPredicate p5 = CompPredicate.CompEqual(main.devices.GetDevice("KitchenDoor"), "Switch", "Off");	//Condition
+		
+		
+		OneAction a6 = new OneAction(main.devices.GetDevice("KitchenDoor"), "Switch", "On");					//TimerAction
+		
+		
+		
+		Rule rule4 = new Rule(te1, p4, a5);	
+		Rule rule5 = new Rule(te1, p5, a6);
+		
+		
+//// Rule Set
 		RuleSet ruleset = new RuleSet();
 		ruleset.add(rule1);
 		ruleset.add(rule2);
-		Evaluation eval = new Evaluation(ruleset);
+		ruleset.add(rule3);
+		ruleset.add(rule4);
+		ruleset.add(rule5);
+		
+////rule
+		
+///evaluation, timer Set
+		
+		main.eval = new Evaluation(ruleset);
+		main.time = new SystemTimeCheck(main);
+		time.SetTimer();
 
-		while(true) {
-			DeviceStatePrinter.print(main.devices);
-			
-			System.out.print("Device: ");
-			String device = input.nextLine();
-			if(device.equals("Stop")) { // StopÀÌ ÀÔ·Â µÇ¸é ½º·¹µå ÁßÁö
-				System.out.println("IOTA°¡ Á¾·á µÇ¾ú½À´Ï´Ù.");
-				break;
-			}
+///ì½˜ì†” ì°½ ì¶œë ¥		
+		Console(main);
 
-			System.out.print("Field: "); 
-			String field = input.nextLine();
-
-			System.out.print("State: "); // 
-			String state = input.nextLine();
-
-			main.EventTrigger(device, field, state);
-			eval.Evaluate(main.devices);
-		}
 	}
 
 	public IotaMain() {
 
 	}
+
 	public void EventTrigger(String devName, String field, String state) throws RuntimeException {
-		if(!devices.IsRegisteredDevice(devName)) //µî·ÏµÈ ÀåÄ¡ÀÎÁö È®ÀÎ
-			throw new RuntimeException(devName + "´Â µî·ÏµÈ ÀåÄ¡¸íÀÌ ¾Æ´Õ´Ï´Ù. ÀåÄ¡¸íÀ» ´Ù½Ã È®ÀÎÇØ ÁÖ¼¼¿ä.");
-		if(!field.equals("Timer")) {
-			if(!devices.GetDeviceProperty(devName).IsRegisteredProperty(field)) //µî·ÏµÈ property °ªÀ» ÀÔ·ÂÇß´ÂÁö È®ÀÎ
-				throw new RuntimeException(field + "´Â ÀåÄ¡¿¡ µî·ÏµÈ ¼Ó¼ºÀÌ ¾Æ´Õ´Ï´Ù. ¼Ó¼ºÀ» ´Ù½Ã È®ÀÎÇØ ÁÖ¼¼¿ä.");
-			if(!devices.GetDeviceProperty(devName).IsRegisteredPropertyState(field, state)) //µî·ÏµÈ property °ªÀ» ÀÔ·ÂÇß´ÂÁö È®ÀÎ
-				throw new RuntimeException(state + "´Â ÀåÄ¡¿¡ µî·ÏµÈ ¼Ó¼º °ªÀÌ ¾Æ´Õ´Ï´Ù. ¼Ó¼º °ªÀ» ´Ù½Ã È®ÀÎÇØ ÁÖ¼¼¿ä.");
-			//¿©±â±îÁö ¿À¸é µî·ÏµÈ ÀåÄ¡ÀÇ µî·ÏµÈ property¸¦ ¹Ù²Ù´Â°Ô µÈ´Ù.
-			//¿©±â¼­ ÀÌÁ¦ ±âÁ¸¿¡´Â ÇÊµå¸¦ ÇÏ³ª¸¸ °®°í ÀÖ´Â °Å·Î »ı°¢ÇØ¼­ ±×³É device¿¡ ÇÊµå 1°³¸¸ ÀÖ¾úÁö¸¸
-			//¿©·¯°³ ÇÊµå°¡ ÀÖ´Â°É·Î ÇØ¾ßÇÏ±â ¶§¹®¿¡ device¿¡ HashMap(String fieldName, Field f)¸¦ ¸¸µé¾î¼­
-			//¿©·¯°³ ÇÊµå¸¦ °¢ ÀåÄ¡¸¶´Ù ÇÊ¿äÇÏ¸é Ãß°¡ÇÏ°í ÇÊµå °ªÀ» ¹Ù²Ù´Â °Íµµ ±× ÀåÄ¡ÀÇ ÇÊµå Áß Æ¯Á¤ ÇÊµå¸¦ ¼±ÅÃÇØ¼­ ±×
-			//°ªÀ» º¯°æÇÏµµ·Ï ÇÏ°í, ÀÌº¥Æ®¿¡¼­ ¹ß»ıÇß´ÂÁö Ã¼Å© ÇÒ¶§µµ ÀåÄ¡ÀÇ Æ¯Á¤ ÇÊµå¸¦ ¼±ÅÃÇØ ±×°ÍÀÇ °ªÀÌ ¹Ù²»´ÂÁö Ã¼Å©ÇÏ°Ô ÇÏÀÚ.
-			devices.GetDevice(devName).DeviceFieldChange(field, state);
+		if (!devices.IsRegisteredDevice(devName)) { // ë“±ë¡ëœ ì¥ì¹˜ì¸ì§€ í™•ì¸
+			
+			System.out.println(devName + "ëŠ” ë“±ë¡ëœ ì¥ì¹˜ëª…ì´ ì•„ë‹™ë‹ˆë‹¤. ì¥ì¹˜ëª…ì„ ë‹¤ì‹œ í™•ì¸í•´ ì£¼ì„¸ìš”.");
+			return;
+			//throw new RuntimeException(devName + "ëŠ” ë“±ë¡ëœ ì¥ì¹˜ëª…ì´ ì•„ë‹™ë‹ˆë‹¤. ì¥ì¹˜ëª…ì„ ë‹¤ì‹œ í™•ì¸í•´ ì£¼ì„¸ìš”.");
 		}
-		else {
-			devices.GetDevice(devName).SetVirtualTime(state);
+		if (!devices.GetDeviceProperty(devName).IsRegisteredProperty(field)) {// ë“±ë¡ëœ property ê°’ì„ ì…ë ¥í–ˆëŠ”ì§€ í™•ì¸
+			System.out.println(field + "ëŠ” ì¥ì¹˜ì— ë“±ë¡ëœ ì†ì„±ì´ ì•„ë‹™ë‹ˆë‹¤. ì†ì„±ì„ ë‹¤ì‹œ í™•ì¸í•´ ì£¼ì„¸ìš”.");
+			return;
+			//throw new RuntimeException(field + "ëŠ” ì¥ì¹˜ì— ë“±ë¡ëœ ì†ì„±ì´ ì•„ë‹™ë‹ˆë‹¤. ì†ì„±ì„ ë‹¤ì‹œ í™•ì¸í•´ ì£¼ì„¸ìš”.");
 		}
+		if (!devices.GetDeviceProperty(devName).IsRegisteredPropertyState(field, state)) {// ë“±ë¡ëœ property ê°’ì„ ì…ë ¥í–ˆëŠ”ì§€ í™•ì¸
+			System.out.println(state + "ëŠ” ì¥ì¹˜ì— ë“±ë¡ëœ ì†ì„± ê°’ì´ ì•„ë‹™ë‹ˆë‹¤. ì†ì„± ê°’ì„ ë‹¤ì‹œ í™•ì¸í•´ ì£¼ì„¸ìš”.");
+			return;
+			//throw new RuntimeException(state + "ëŠ” ì¥ì¹˜ì— ë“±ë¡ëœ ì†ì„± ê°’ì´ ì•„ë‹™ë‹ˆë‹¤. ì†ì„± ê°’ì„ ë‹¤ì‹œ í™•ì¸í•´ ì£¼ì„¸ìš”.");
+		}
+		// ì…ë ¥í•œ ì •ë³´ë¥¼ ì´ìš©í•´ì„œ í•´ë‹¹í•˜ëŠ” ì•¡ì…˜ì„ êµ¬ì„±í•œë‹¤.
+		Action action = new OneAction(devices.GetDevice(devName), field, state);
+
+		// ì•¡ì…˜ì´ ì¼ì–´ë‚˜ëŠ” í•„ë“œë¥¼ í™•ì¸í•˜ê³ , ì•¡ì…˜ì´ ì¼ì–´ë‚ ì§€ ì•ˆì¼ì–´ë‚ ì§€ë¥¼ ê²°ì •í•œë‹¤.
+		if (!devices.GetDevice(devName).GetEventElement(field).GetCurrentValue().equals(state)) {
+			action.PerformAction();
+			System.out.println("ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡");
+			System.out.println(devices.GetDeviceMapList().toString());
+			DeviceStatePrinter.print(devices);
+
+		}
+
 	}
+
+	public static void Console(IotaMain main) {
+		System.out.println("ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡");
+		System.out.println(main.devices.GetDeviceMapList().toString());
+		DeviceStatePrinter.print(main.devices);
+		while (true) {
+		
+			System.out.print("Device: ");
+			String device = main.input.nextLine();
+			if (device.equals("Stop")) { // Stopì´ ì…ë ¥ ë˜ë©´ ìŠ¤ë ˆë“œ ì¤‘ì§€
+				System.out.println("IOTAê°€ ì¢…ë£Œ ë˜ì—ˆìŠµë‹ˆë‹¤.");
+				break;
+			}
+			if (device.equals("Log")) { //ì§€ê¸ˆê¹Œì§€ ë³€í•œ ë””ë°”ì´ìŠ¤ì˜ ìƒíƒœì •ë³´ ì¶œë ¥
+				for (String string : TimeLog.actionLog) {
+					System.out.println(string);
+				}
+				continue;
+			}
+
+			System.out.print("Field: ");
+			String field = main.input.nextLine();
+
+			System.out.print("State: "); //
+			String state = main.input.nextLine();
+
+			main.EventTrigger(device, field, state);
+
+			main.eval.Evaluate(main.devices);
+		
+		}
+
+	}
+
 }
