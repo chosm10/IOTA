@@ -21,10 +21,11 @@ public class Evaluation {
 //이벤트 검사		
 		this.EventCheck();																	
 //이벤트가 존재한다면 조건 검사
-		while (!getEvents.isEmpty()) {
+		while( !getEvents.isEmpty()) {
 			this.PredicateCheck();
 
 		}
+		
 //조건을 만족한 룰들을 실행	
 		for (Action ac : this.actionList) {
 
@@ -45,6 +46,7 @@ public class Evaluation {
 
 		}
 
+		//Evaluate(devices);
 		this.EventCheck();
 
 	}

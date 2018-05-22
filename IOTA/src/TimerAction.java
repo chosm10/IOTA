@@ -27,7 +27,7 @@ public class TimerAction implements Action { // 액션을 객체로 받아 타�
 		this.EndTime = IotaMain.time.getEndTime(Integer.parseInt(timer));
 		this.TimerEnd = false; // 타이머가 시작됨
 	}
-
+	
 	public void PerformAction() {
 		if (this.StartTime.equals("null")) { // 타이머가 설정되어 있지 않다면 타이머 설정
 			setTimer();
@@ -47,6 +47,9 @@ public class TimerAction implements Action { // 액션을 객체로 받아 타�
 			this.TimerEnd = true; // 타이머 종료
 
 		}
+		else
+			System.out.println(this.EndTime);
+		
 	}
 
 	@Override
