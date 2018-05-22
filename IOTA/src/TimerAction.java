@@ -47,8 +47,6 @@ public class TimerAction implements Action { // 액션을 객체로 받아 타�
 			this.TimerEnd = true; // 타이머 종료
 
 		}
-		else
-			System.out.println(this.EndTime);
 		
 	}
 
