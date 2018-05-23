@@ -6,13 +6,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Evaluation {
 	private RuleSet ruleSet;
-	private ArrayList<Event> getEvents;
+	private ArrayList<Event> EventSet;
 	private ArrayList<Action> actionList;
 	ArrayList<Action> TimerActionList;
 
 	public Evaluation(RuleSet ruleSet) {
 		this.ruleSet = ruleSet;
-		this.getEvents = new ArrayList<>();
+		this.EventSet = new ArrayList<>();
 		this.actionList = new ArrayList<>();
 		this.TimerActionList = new ArrayList<>();
 	}
@@ -21,7 +21,7 @@ public class Evaluation {
 //이벤트 검사		
 		this.EventCheck();																	
 //이벤트가 존재한다면 조건 검사
-		while( !getEvents.isEmpty()) {
+		while( !EventSet.isEmpty()) {
 			this.PredicateCheck();
 
 		}
@@ -55,7 +55,7 @@ public class Evaluation {
 		for (Event e : ruleSet.RuleSet.keySet()) {
 
 			if (e.IsEventTriggered()) {
-				getEvents.add(e);
+				EventSet.add(e);
 			}
 
 		}
@@ -63,7 +63,7 @@ public class Evaluation {
 	}
 
 	public void PredicateCheck() {
-		for (Event e : this.getEvents) {				//발생한 이벤트를 확인
+		for (Event e : this.EventSet) {				//발생한 이벤트를 확인
 			for (Rule rule : ruleSet.RuleSet.get(e)) {	//이벤트마다 룰을 검사
 
 				Predicate p = rule.GetPredicate();
@@ -86,7 +86,7 @@ public class Evaluation {
 			}
 			e.TriggerOff();
 		}
-		getEvents.clear();
+		EventSet.clear();
 	}
 
 }

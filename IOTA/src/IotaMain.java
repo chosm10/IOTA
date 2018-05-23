@@ -6,6 +6,7 @@ public class IotaMain {
 	Evaluation eval;
 	static SystemTimeCheck time;
 	Scanner input;
+	RuleSet ruleset;
 
 	public static void main(String[] args) throws InterruptedException {
 		// Scanner input = new Scanner(System.in);
@@ -57,18 +58,18 @@ public class IotaMain {
 		Rule rule5 = new Rule(te1, p5, a6);
 
 		//// Rule Set
-		RuleSet ruleset = new RuleSet();
-		ruleset.add(rule1);
-		ruleset.add(rule2);
-		ruleset.add(rule3);
-		ruleset.add(rule4);
-		ruleset.add(rule5);
+		main.ruleset = new RuleSet();
+		main.ruleset.add(rule1);
+		main.ruleset.add(rule2);
+		main.ruleset.add(rule3);
+		main.ruleset.add(rule4);
+		main.ruleset.add(rule5);
 
 		//// rule
 
 		/// evaluation, timer Set
 
-		main.eval = new Evaluation(ruleset);
+		main.eval = new Evaluation(main.ruleset);
 		main.time = new SystemTimeCheck(main);
 		time.SetVirtualTimer();
 
