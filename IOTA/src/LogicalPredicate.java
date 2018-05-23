@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class LogicalPredicate implements Predicate {
 	public static final int AND = 1; 
@@ -31,4 +32,6 @@ public class LogicalPredicate implements Predicate {
 		}
 		return false;
 	}
+
+	
 }

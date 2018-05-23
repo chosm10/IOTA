@@ -24,4 +24,5 @@ public class PredicateList implements Predicate{
 			return false;
 		
 	}
+
 }

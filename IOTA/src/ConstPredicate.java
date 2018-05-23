@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class ConstPredicate implements Predicate {
 	boolean constValue;
@@ -7,4 +8,5 @@ public class ConstPredicate implements Predicate {
 	public boolean CheckPredicate() {
 		return this.constValue;
 	}
+
 }

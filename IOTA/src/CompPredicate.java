@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class CompPredicate implements Predicate {
 	public static final int EQUAL = 1; // =
 	public static final int LESS_THAN = 2; // <
@@ -41,5 +43,10 @@ public class CompPredicate implements Predicate {
 			return Double.parseDouble(currentElementValue) < Double.parseDouble(oprnd2);
 		}
 		return false;
+	}
+	public ArrayList<Field> FieldList() {
+		ArrayList<Field> fields = new ArrayList<>();
+		fields.add(this.device.fields.get(oprnd1));
+		return fields;
 	}
 }

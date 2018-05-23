@@ -28,27 +28,25 @@ public class SystemTimeCheck { // 시스템 시간을 계속 받아오는 쓰레
 		this.main = main;
 	}
 
-	public void SetTimer() {
+	public void SetTimer() {				//실제 시스템 시간을 설정할 때
 		Timer timer = new Timer();
 
 		TimerTask task = new TimerTask() {
 			public void run() {
-				
+
 				cal = Calendar.getInstance();
 				CurrentTime = new Date();
 				cal.setTime(CurrentTime);
 				TimeToString = timeLog.format(CurrentTime);
 
-				
 				main.eval.Evaluate(main.devices);
-				
 
 			}
 		};
 		timer.schedule(task, 0, 200); // 타이머 갱신 간격, 1000 = 1s
 	}
 
-	public void SetVirtualTimer() {
+	public void SetVirtualTimer() {			//가상으로 타이머 이벤트의 경과를 확인하고 싶을 때
 		Timer timer = new Timer();
 		cal = Calendar.getInstance();
 
@@ -62,19 +60,19 @@ public class SystemTimeCheck { // 시스템 시간을 계속 받아오는 쓰레
 				TimeToString = timeLog.format(CurrentTime);
 
 				main.eval.Evaluate(main.devices);
-				System.out.println(TimeToString);
+				//System.out.println(TimeToString);
 			}
 		};
-		timer.schedule(task, 0, 1000); // 타이머 갱신 간격, 1000 = 1s
+		timer.schedule(task, 0, 200); // 타이머 갱신 간격, 1000 = 1s
 	}
+
 	public void VirtaulTimerPLUS() {
 		cal.add(Calendar.SECOND, 1);
 
 		CurrentTime = cal.getTime();
 		TimeToString = timeLog.format(CurrentTime);
-	
+
 	}
-	
 
 	public String getEndTime(int i) {
 		forEndTime = (Calendar) cal.clone();
