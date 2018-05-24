@@ -19,20 +19,19 @@ public class Evaluation {
 	}
 
 	public void Evaluate(RegisteredDevices devices) {
-
-		// 이벤트 검사
 		EventCheck();
+		// 이벤트 검사
 		// 이벤트가 존재한다면 조건 검사
 		while (!EventSet.isEmpty()) {
 			PredicateCheck();
-			System.out.println("EVAL START");
+
 		}
 
 		// 조건을 만족한 룰들의 액션을 실행
 		ArrayList<Boolean> ListCheck = new ArrayList();
 		while (!actionList.isEmpty()) {
 			Action ac = actionList.get((int) (Math.random() * (actionList.size())));
-		
+
 			ac.PerformAction();
 			if (ac.ActionComplete()) {
 				System.out.println("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
@@ -40,32 +39,28 @@ public class Evaluation {
 				DeviceStatePrinter.print(devices);
 				actionList.remove(ac);
 			}
-			if(RemainNormalCheck())
+			if (RemainNormalCheck())
 				break;
 			else
 				continue;
-			
+
 		}
 		EventCheck();
-		/*
-		 * for (Action ac : this.actionList) {
-		 * 
-		 * ac.PerformAction(); /// 액션에 의해 상태가 변했다면 상태 출력 if (ac.ActionComplete()) {
-		 * System.out.println("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
-		 * System.out.println(devices.GetDeviceMapList().toString());
-		 * DeviceStatePrinter.print(devices); actionList.remove(ac); } if
-		 * (this.actionList.contains(ac)) { continue; } else break;
-		 * 
-		 * } EventCheck();
-		 */
+		if(!EventSet.isEmpty())	//이벤트가 발생했다면 다시 처음 단계로
+			Evaluate(devices);
+		else
+			return;
+		
 	}
+
+
+
 	public boolean RemainNormalCheck() {
 		ArrayList<Boolean> ListCheck = new ArrayList();
 		for (Action ac2 : actionList) {
 			if (ac2.ActionType().equals("Timer")) {
 				ListCheck.add(true);
-			}
-			else
+			} else
 				ListCheck.add(false);
 		}
 		if (ListCheck.contains(false))
