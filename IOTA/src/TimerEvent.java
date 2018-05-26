@@ -1,58 +1,55 @@
 
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class TimerEvent implements Event {
-	Calendar cal;
+	Timer timer;
+	String eventType = "Timer";
 	
-	String EventName;
-	boolean trigger = false;
+	String EventTime = "null";
+	String TimerType = "null";
+	SimpleDateFormat ChangeTimeFormat = new SimpleDateFormat("HH:mm:ss");
 
-	//// Using To get TimerEndTime
-	Date date2;
+	public TimerEvent(Timer timer) {
+		this.timer = timer;
+		this.TimerType = "TimerEvent";
+	}
 
-	private String time; // 타이머 이벤트용 // 형식 :: "HH:mm:ss"
-	SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-	SimpleDateFormat timeFormat2 = new SimpleDateFormat("HH:mm:ss");
-	private int cycle; // 반복 주기 // 초단위로 설정
-	int count; // 반복 횟수
+	public TimerEvent(Timer timer, String CurrentTime) {
+		this.timer = timer;
+		this.EventTime = CurrentTime;
+		this.TimerType = "ClockEvent";
+	}
 
-	public TimerEvent(String time, int cycle, int count) {
-		this.time = time;
-		this.cycle = cycle;
-		this.count = count;
-		
-		this.EventName = time + cycle + count;
+	public static TimerEvent Timer(Timer timer) {
+		return new TimerEvent(timer);
+	}
 
+	public static TimerEvent Clock(Timer timer, String CurrentTime) {
+		return new TimerEvent(timer, CurrentTime);
 	}
 
 	public boolean IsEventTriggered() {
+		switch (TimerType) {
+		case "TimerEvent":
+			if (!timer.StartTime.equals("null")) {
+				return true;
+			}
+		case "ClockEvent":
+			if (EventTime.equals(ChangeTimeFormat.format(IotaMain.time.CurrentTime)))
+				return true;
+		default:
+			return false;
+		}
 
-		if (timeFormat2.format(IotaMain.time.CurrentTime).equals(time)) {
-			cal = IotaMain.time.cal;
-			cal.add(Calendar.SECOND, cycle);
-			date2 = cal.getTime();
-			time = timeFormat.format(date2);
-			if (count == -1) {
-				this.trigger = true;
-				return trigger;
-			}
-			if (count > 0) {
-				count--;
-				this.trigger = true;
-				return trigger;
-			}
-			return trigger;
-		} else
-			return trigger;
 	}
 
 	@Override
 	public String EventLog() {
+		return null;
 		// TODO Auto-generated method stub
-		return EventName;
+
 	}
 
 	@Override
@@ -64,7 +61,13 @@ public class TimerEvent implements Event {
 	@Override
 	public void TriggerOff() {
 		// TODO Auto-generated method stub
-		this.trigger = false;
+
+	}
+
+	@Override
+	public String EventType() {
+		// TODO Auto-generated method stub
+		return this.eventType;
 	}
 
 }

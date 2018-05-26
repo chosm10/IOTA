@@ -6,13 +6,14 @@ public class Device {
 	protected String devName; // Door1, Door2 같은 장치의 이름
 	protected HashMap<String, Field> fields;
 	protected ArrayList<String> fieldList; // 맵 반복을 위해 존재
-
+	protected Timer Timer;
 	public Device(String devName) {
 
 		this.devName = devName;
 		this.property = new Property();
 		fields = new HashMap<>();
 		fieldList = new ArrayList<>();
+		this.Timer = new Timer();
 	}
 
 	public void AddUsingField(String fieldName) throws RuntimeException { // Property는 사용 가능한 속성들이고, Field는 실제 사용하는 것들

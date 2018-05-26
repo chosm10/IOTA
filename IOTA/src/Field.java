@@ -5,6 +5,7 @@ public class Field implements EventElement {
 	private String current_value;
 	private String fieldType;
 	private boolean Trigger = false;
+	private int ActionCount = 0;
 
 	private String fieldName;
 	private String devName;
@@ -25,6 +26,7 @@ public class Field implements EventElement {
 		if (!GetCurrentValue().equals(changedValue)) {
 			this.old_value = current_value;
 			this.current_value = changedValue;
+			this.ActionCount++;
 		
 		if (!GetOldValue().equals(GetCurrentValue()))
 			this.TriggerOn();
@@ -70,7 +72,7 @@ public class Field implements EventElement {
 	}
 
 	public String PrintEventState() {
-		return this.devName + " " + this.fieldName;
+		return this.devName + " " + this.fieldName + " " + this.ActionCount;
 	}
 
 	@Override

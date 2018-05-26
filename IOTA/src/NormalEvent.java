@@ -1,9 +1,8 @@
-
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class NormalEvent implements Event {
+	private String EventType = "Normal";
 	private EventElement eventElement; // EventElement 인터페이스를 구현한 필드 클래스와 타이머 클래스를 인자로 받음.
 	private String n1, n2;
 	private String caseType;
@@ -56,7 +55,7 @@ public class NormalEvent implements Event {
 		this.caseType = " FromTo 이벤트 ";
 
 	}
-
+	
 	public static NormalEvent UnConditional(EventElement eventElement) {
 
 		return new NormalEvent(eventElement);
@@ -124,5 +123,11 @@ public class NormalEvent implements Event {
 
 	public String EventLog() {
 		return (this.eventElement.PrintEventState() + caseType);
+	}
+
+	@Override
+	public String EventType() {
+		// TODO Auto-generated method stub
+		return this.EventType;
 	}
 }

@@ -7,94 +7,78 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Evaluation {
 	private RuleSet ruleSet;
-	private ArrayList<Event> EventSet;
-	private ArrayList<Action> actionList;
-	ArrayList<Action> TimerActionList;
+
+	private RuleSet forCheckRule;
+	private ArrayList<Rule> EventHandlerList;
+	private ArrayList<Rule> PredicateList;
 
 	public Evaluation(RuleSet ruleSet) {
 		this.ruleSet = ruleSet;
-		this.EventSet = new ArrayList<>();
-		this.actionList = new ArrayList<>();
-		this.TimerActionList = new ArrayList<>();
+		this.EventHandlerList = new ArrayList<>();
+		this.PredicateList = new ArrayList<>();
+		this.PredicateList = new ArrayList<>();
+
 	}
 
 	public void Evaluate(RegisteredDevices devices) {
-		EventCheck();
-		// 이벤트 검사
-		// 이벤트가 존재한다면 조건 검사
-		while (!EventSet.isEmpty()) {
-			PredicateCheck();
+		EventCheck(ruleSet);
 
+		PredicateCheck(EventHandlerList);
+
+		Action(PredicateList, devices);
+
+		EventCheck(ruleSet);
+
+		if (!EventHandlerList.isEmpty()) // 이벤트가 발생했다면 다시 처음 단계로
+			for (Rule rule : EventHandlerList) {
+				ArrayList<String> CheckEventType = new ArrayList<>();
+				CheckEventType.add(rule.GetEventHandler().EventType());
+				if (!CheckEventType.contains("Timer"))
+
+					Evaluate(devices);
+			}
+		else
+			return;
+
+	}
+
+	public void EventCheck(RuleSet ruleSet) {
+
+		for (Event event : ruleSet.EventCheck) {
+
+			if (event.IsEventTriggered()) {
+				if (!EventHandlerList.contains(event))
+					EventHandlerList.addAll(ruleSet.RuleSet.get(event));
+				else
+					continue;
+			}
+		}
+	}
+
+	public void PredicateCheck(ArrayList<Rule> EventHandlerList) {
+		while (!EventHandlerList.isEmpty()) {
+			Rule rule = EventHandlerList.get((int) (Math.random() * (EventHandlerList.size())));
+			if (rule.GetPredicate().CheckPredicate() && !PredicateList.contains(rule))
+				PredicateList.add(rule);
+			rule.GetEventHandler().TriggerOff();
+			EventHandlerList.remove(rule);
+
+			if (EventHandlerList.isEmpty())
+				break;
 		}
 
-		// 조건을 만족한 룰들의 액션을 실행
-		ArrayList<Boolean> ListCheck = new ArrayList();
-		while (!actionList.isEmpty()) {
-			Action ac = actionList.get((int) (Math.random() * (actionList.size())));
+	}
 
-			ac.PerformAction();
-			if (ac.ActionComplete()) {
+	public void Action(ArrayList<Rule> PredicateList, RegisteredDevices devices) {
+		while (!PredicateList.isEmpty()) {
+			Rule rule = PredicateList.get((int) (Math.random() * (PredicateList.size())));
+			rule.GetAction().PerformAction();
+			if (rule.GetAction().ActionComplete()) {
 				System.out.println("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
 				System.out.println(devices.GetDeviceMapList().toString());
 				DeviceStatePrinter.print(devices);
-				actionList.remove(ac);
 			}
-			if (RemainNormalCheck())
-				break;
-			else
-				continue;
-
+			PredicateList.remove(rule);
 		}
-		EventCheck();
-		if(!EventSet.isEmpty())	//이벤트가 발생했다면 다시 처음 단계로
-			Evaluate(devices);
-		else
-			return;
-		
-	}
-
-
-
-	public boolean RemainNormalCheck() {
-		ArrayList<Boolean> ListCheck = new ArrayList();
-		for (Action ac2 : actionList) {
-			if (ac2.ActionType().equals("Timer")) {
-				ListCheck.add(true);
-			} else
-				ListCheck.add(false);
-		}
-		if (ListCheck.contains(false))
-			return true;
-		else
-			return false;
-	}
-
-	public void EventCheck() {
-		for (Event e : ruleSet.RuleSet.keySet()) {
-
-			if (e.IsEventTriggered()) {
-				EventSet.add(e);
-			}
-
-		}
-
-	}
-
-	public void PredicateCheck() {
-		for (Event e : this.EventSet) { // 발생한 이벤트를 확인
-			for (Rule rule : ruleSet.RuleSet.get(e)) { // 이벤트마다 룰을 검사
-				if (rule.GetPredicate().CheckPredicate()) {
-					System.out.println(e.EventLog() + " 조건 만족"); // 룰 조건을 만족했는지 확인
-					if (rule.GetAction().ActionType().equals("AnyAction")) {
-						for (Action action : rule.GetAction().ForAnyAction())
-							actionList.add(action);
-					} else
-						actionList.add(rule.GetAction());
-					System.out.println(rule.GetAction().ActionType() + " 액션 대기"); // 어떤 액션이 존재하는지 확인
-				}
-			}
-			e.TriggerOff();
-		}
-		EventSet.clear();
 	}
 }

@@ -5,5 +5,4 @@ public interface Action {
 	public String ActionType();
 	public String ActionName();
 	public boolean ActionComplete();
-	public ArrayList<Action> ForAnyAction();
 }

@@ -6,14 +6,14 @@ public class IotaMain {
 	Evaluation eval;
 	static SystemTimeCheck time;
 	Scanner input;
-	RuleSet ruleset;
+	
 
 	public static void main(String[] args) throws InterruptedException {
 		// Scanner input = new Scanner(System.in);
 		IotaMain main = new IotaMain();
 		main.devices = new RegisteredDevices();
 		main.input = new Scanner(System.in);
-		
+		RuleSet ruleset;
 
 		/// Rule 1
 		NormalEvent e1 = NormalEvent.From(main.devices.GetDevice("EntranceDoor").GetEventElement("Lock"), "Locked");
@@ -25,54 +25,40 @@ public class IotaMain {
 				"Off");
 		CompPredicate p2 = CompPredicate.CompEqual(main.devices.GetDevice("KitchenDoor"), "Lock", "Locked");
 		OneAction a21 = new OneAction(main.devices.GetDevice("KitchenDoor"), "Lock", "UnLocked");
+		TimerAction ta = new TimerAction(main.devices.GetDevice("PorchMotionSensor").Timer, "ON");
 		AnyActions as2 = new AnyActions();
 		as2.addAction(a21);
+		as2.addAction(ta);
 		Rule rule2 = new Rule(e2, p2, as2);
 		/// Rule 3 for Timer
-		NormalEvent e3 = NormalEvent.From(main.devices.GetDevice("HallwayLight").GetEventElement("Switch"), "On"); // Event
-		CompPredicate p3 = CompPredicate.CompEqual(main.devices.GetDevice("EntranceDoor"), "Lock", "Locked"); // Condition
-
-		CompPredicate p3timer = CompPredicate.CompEqual(main.devices.GetDevice("KitchenDoor"), "Switch", "On"); // TimerCondition
-		OneAction a3 = new OneAction(main.devices.GetDevice("KitchenDoor"), "Switch", "Off"); // TimerAction
-		OneAction a4 = new OneAction(main.devices.GetDevice("PorchMotionSensor"), "Switch", "Off");
-		AnyActions acs = new AnyActions(); // 액션을 한번에 여러개 실행.
-		acs.addAction(a3);
-		acs.addAction(a4);
-		Rule rule3Timer = new Rule(new NormalEvent(), new ConstPredicate(true), acs); // TimerRuleSet
-
-		TimerAction ta3 = new TimerAction(rule3Timer, "5", 3); // TimerAction Set
-
-		Rule rule3 = new Rule(e3, p3, ta3); // Rule 3 for Timer
-
-		/// rule 4 지정 시간 이벤트
-		TimerEvent te1 = new TimerEvent("10:14:00", 10, -1); // Event
-		CompPredicate p4 = CompPredicate.CompEqual(main.devices.GetDevice("KitchenDoor"), "Switch", "On"); // Condition
-
-		OneAction a5 = new OneAction(main.devices.GetDevice("KitchenDoor"), "Switch", "Off"); // TimerAction
-
-		CompPredicate p5 = CompPredicate.CompEqual(main.devices.GetDevice("KitchenDoor"), "Switch", "Off"); // Condition
-
-		OneAction a6 = new OneAction(main.devices.GetDevice("KitchenDoor"), "Switch", "On"); // TimerAction
-
-		Rule rule4 = new Rule(te1, p4, a5);
-		Rule rule5 = new Rule(te1, p5, a6);
-
+		
+		TimerEvent te = TimerEvent.Timer((main.devices.GetDevice("PorchMotionSensor").Timer));
+		TimerPredicate tp = new TimerPredicate(main.devices.GetDevice("PorchMotionSensor").Timer, "5");
+		AnyActions tas = new AnyActions();
+		OneAction ta1 = new OneAction(main.devices.GetDevice("PorchMotionSensor"), "Switch", "Off");
+		TimerAction ta2 = new TimerAction(main.devices.GetDevice("PorchMotionSensor").Timer, "OFF");
+		tas.addAction(ta1);
+		tas.addAction(ta2);
+		
+		Rule rule3 = new Rule(te, tp, tas);
+		
+		
+	
+	
 		//// Rule Set
-		main.ruleset = new RuleSet();
-		main.ruleset.add(rule1);
-		main.ruleset.add(rule2);
-		main.ruleset.add(rule3);
-		main.ruleset.add(rule4);
-		main.ruleset.add(rule5);
-
+		ruleset= new RuleSet();
+		ruleset.add(rule1);
+		ruleset.add(rule2);
+		ruleset.add(rule3);
+	
+		System.out.println(ruleset.RuleList.size());
 		//// rule
+	
 
-		/// evaluation, timer Set
-
-		main.eval = new Evaluation(main.ruleset);
+		main.eval = new Evaluation(ruleset);
 		main.time = new SystemTimeCheck(main);
 		time.SetVirtualTimer();
-
+	
 		/// 콘솔 창 출력
 		Console(main);
 
@@ -135,8 +121,8 @@ public class IotaMain {
 				continue;
 			}
 			if (device.equals("+")) {
-				System.out.println(main.time.TimeToString);
 				main.time.VirtaulTimerPLUS();
+				System.out.println(main.time.TimeToString);
 				continue;
 			}
 

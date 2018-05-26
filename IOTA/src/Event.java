@@ -2,6 +2,8 @@
 public interface Event {
 
 	public boolean IsEventTriggered();
+	
+	public String EventType();
 
 	public String EventLog();
 

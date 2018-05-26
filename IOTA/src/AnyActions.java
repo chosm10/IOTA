@@ -14,11 +14,6 @@ public class AnyActions implements Action { // 한번에 여러 액션들을 하
 	}
 
 	@Override
-	public ArrayList<Action> ForAnyAction() {
-		// TODO Auto-generated method stub
-		return this.actions;
-	}
-	@Override
 	public String ActionType() {
 		// TODO Auto-generated method stub
 		return "AnyAction";
@@ -26,7 +21,13 @@ public class AnyActions implements Action { // 한번에 여러 액션들을 하
 
 	@Override
 	public boolean ActionComplete() {
-		return false;
+		for(Action action : actions) {
+			actionsComplete.add(action.ActionComplete());
+		}
+		if(actionsComplete.contains(true))
+			return true;
+		else
+			return false;
 	}
 
 	public String ActionName() {

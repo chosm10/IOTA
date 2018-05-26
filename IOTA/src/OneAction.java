@@ -33,8 +33,7 @@ public class OneAction implements Action {
 			System.out.println(this.ActionName());
 			TimeLog.actionLog.add(IotaMain.time.TimeToString + " " +this.ActionName()+ " ");
 		}
-		else
-			ActionComplete = false;
+	
 	}
 	@Override
 	public String ActionType() {
@@ -52,10 +51,5 @@ public class OneAction implements Action {
 		return this.ActionName;
 		
 	}
-	@Override
-	public ArrayList<Action> ForAnyAction() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
+
 }
