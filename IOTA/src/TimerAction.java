@@ -15,21 +15,17 @@ public class TimerAction implements Action { // 액션을 객체로 받아 타�
 
 	public void PerformAction() {
 		if (string.equals("ON")) {
-			System.out.println("Timer On");
+			//System.out.println("Timer On");
 			timer.TimerStart();
+			TimeLog.actionLog.add(IotaMain.time.TimeToString + " "+ActionName());
 		}
 		
 		if (string.equals("OFF")&&!timer.StartTime.equals("null")) {
-			System.out.println("Timer Off");
+			//System.out.println("Timer Off");
 			timer.TimerStop();
+			TimeLog.actionLog.add(IotaMain.time.TimeToString + " "+ActionName());
 		}
 
-	}
-
-	@Override
-	public String ActionType() {
-		// TODO Auto-generated method stub
-		return "Timer";
 	}
 
 	@Override
@@ -39,7 +35,7 @@ public class TimerAction implements Action { // 액션을 객체로 받아 타�
 	}
 
 	public String ActionName() {
-		return this.ActionType() + " ";
+		return "Timer" + "." +string;
 	}
 
 }

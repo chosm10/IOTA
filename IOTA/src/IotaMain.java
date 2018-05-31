@@ -41,23 +41,19 @@ public class IotaMain {
 		tas.addAction(ta2);
 		
 		Rule rule3 = new Rule(te, tp, tas);
-		
-		
-	
-	
+
 		//// Rule Set
 		ruleset= new RuleSet();
 		ruleset.add(rule1);
 		ruleset.add(rule2);
 		ruleset.add(rule3);
-	
-		System.out.println(ruleset.RuleList.size());
-		//// rule
-	
 
+	
 		main.eval = new Evaluation(ruleset);
 		main.time = new SystemTimeCheck(main);
+		
 		time.SetVirtualTimer();
+		//time.SetTimer();
 	
 		/// 콘솔 창 출력
 		Console(main);

@@ -39,7 +39,7 @@ public class SystemTimeCheck { // 시스템 시간을 계속 받아오는 쓰레
 				cal.setTime(CurrentTime);
 				TimeToString = timeLog.format(CurrentTime);
 
-				main.eval.Evaluate(main.devices);
+				//main.eval.Evaluate(main.devices);
 
 			}
 		};

@@ -72,7 +72,7 @@ public class Field implements EventElement {
 	}
 
 	public String PrintEventState() {
-		return this.devName + " " + this.fieldName + " " + this.ActionCount;
+		return this.devName + " " + this.fieldName;
 	}
 
 	@Override

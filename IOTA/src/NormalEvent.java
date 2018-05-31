@@ -82,27 +82,27 @@ public class NormalEvent implements Event {
 
 			case " From 이벤트 ":
 				if ((this.eventElement.GetOldValue().equals(n1))) {
-					System.out.println(EventLog());
+				//	System.out.println(EventLog());
 					return true;
 
 				} else
 					return false;
 			case " To 이벤트 ":
 				if (this.eventElement.GetCurrentValue().equals(n2)) {
-					System.out.println(EventLog());
+				//	System.out.println(EventLog());
 					return true;
 				} else
 					return false;
 			case " FromTo 이벤트 ":
 				if ((this.eventElement.GetOldValue().equals(this.n1))
 						&& (this.eventElement.GetCurrentValue().equals(this.n2))) {
-					System.out.println(EventLog());
+				//	System.out.println(EventLog());
 					return true;
 				} else
 					return false;
 
 			case " UnConditional 이벤트 ":
-				System.out.println(EventLog());
+				//System.out.println(EventLog());
 				return true;
 			}
 		}

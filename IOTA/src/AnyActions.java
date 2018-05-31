@@ -14,30 +14,26 @@ public class AnyActions implements Action { // 한번에 여러 액션들을 하
 	}
 
 	@Override
-	public String ActionType() {
-		// TODO Auto-generated method stub
-		return "AnyAction";
-	}
-
-	@Override
 	public boolean ActionComplete() {
-		for(Action action : actions) {
+		for (Action action : actions) {
 			actionsComplete.add(action.ActionComplete());
 		}
-		if(actionsComplete.contains(true))
+		if (actionsComplete.contains(true))
 			return true;
 		else
 			return false;
 	}
 
 	public String ActionName() {
-		return actions.get(0).ActionName();
+		ArrayList<String> ActionNames = new ArrayList<>();
+		for (Action action : actions)
+			ActionNames.add(action.ActionName());
+		return ActionNames.toString();
 	}
 
-	
 	@Override
 	public void PerformAction() {
-		for(Action ac: actions)
+		for (Action ac : actions)
 			ac.PerformAction();
 		// TODO Auto-generated method stub
 	}

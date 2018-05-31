@@ -13,11 +13,11 @@ public class TimerPredicate implements Predicate{
 		// TODO Auto-generated method stub
 		if(this.EndTime.equals("null")) {
 			this.EndTime = IotaMain.time.getEndTime(Integer.parseInt(count));
-			//System.out.println(this.EndTime);
 		}
-		
-		if(IotaMain.time.TimeToString.equals(EndTime))
+		if(IotaMain.time.TimeToString.equals(EndTime)) {
+			this.EndTime="null";
 			return true;
+		}
 		else
 			return false;
 	}

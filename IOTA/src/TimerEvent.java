@@ -36,6 +36,8 @@ public class TimerEvent implements Event {
 			if (!timer.StartTime.equals("null")) {
 				return true;
 			}
+			else
+				return false;
 		case "ClockEvent":
 			if (EventTime.equals(ChangeTimeFormat.format(IotaMain.time.CurrentTime)))
 				return true;
@@ -47,7 +49,7 @@ public class TimerEvent implements Event {
 
 	@Override
 	public String EventLog() {
-		return null;
+		return this.eventType + "이벤트";
 		// TODO Auto-generated method stub
 
 	}

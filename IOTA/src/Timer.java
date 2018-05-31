@@ -8,11 +8,12 @@ public class Timer {
 
 		if (StartTime.equals("null"))
 			this.StartTime = IotaMain.time.TimeToString;
-
-	}
 	
+	}
+
 	public void TimerStop() {
-		this.StartTime = "null";
+		if (!StartTime.equals("null"))
+			this.StartTime = "null";
 	}
 
 }

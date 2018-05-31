@@ -21,38 +21,39 @@ public class Evaluation {
 	}
 
 	public void Evaluate(RegisteredDevices devices) {
-		EventCheck(ruleSet);
+		EventCheck(this.ruleSet);
 
-		PredicateCheck(EventHandlerList);
+		while (!EventHandlerList.isEmpty()) {
 
-		Action(PredicateList, devices);
+			PredicateCheck(EventHandlerList);
+			Action(PredicateList, devices);
+			EventCheck(this.ruleSet);
 
-		EventCheck(ruleSet);
-
-		if (!EventHandlerList.isEmpty()) // 이벤트가 발생했다면 다시 처음 단계로
-			for (Rule rule : EventHandlerList) {
+			if (!EventHandlerList.isEmpty()) {
 				ArrayList<String> CheckEventType = new ArrayList<>();
-				CheckEventType.add(rule.GetEventHandler().EventType());
-				if (!CheckEventType.contains("Timer"))
-
-					Evaluate(devices);
-			}
-		else
-			return;
-
+				for (Rule rule : EventHandlerList) {
+					CheckEventType.add(rule.GetEventHandler().EventType());
+				}
+				if (!CheckEventType.contains("Normal"))
+					break;
+			} else
+				break;
+		}
 	}
 
 	public void EventCheck(RuleSet ruleSet) {
 
 		for (Event event : ruleSet.EventCheck) {
-
 			if (event.IsEventTriggered()) {
-				if (!EventHandlerList.contains(event))
+				if (!EventHandlerList.contains(ruleSet.RuleSet.get(event)))
 					EventHandlerList.addAll(ruleSet.RuleSet.get(event));
 				else
 					continue;
+				event.TriggerOff();
 			}
 		}
+		
+		PrintEventHandler();
 	}
 
 	public void PredicateCheck(ArrayList<Rule> EventHandlerList) {
@@ -60,25 +61,43 @@ public class Evaluation {
 			Rule rule = EventHandlerList.get((int) (Math.random() * (EventHandlerList.size())));
 			if (rule.GetPredicate().CheckPredicate() && !PredicateList.contains(rule))
 				PredicateList.add(rule);
-			rule.GetEventHandler().TriggerOff();
 			EventHandlerList.remove(rule);
-
-			if (EventHandlerList.isEmpty())
-				break;
 		}
-
+		if (!PredicateList.isEmpty())
+			System.out.println("---\nEventHandler\t-> Predicate\t= " + PredicateList.toString());
 	}
 
 	public void Action(ArrayList<Rule> PredicateList, RegisteredDevices devices) {
 		while (!PredicateList.isEmpty()) {
 			Rule rule = PredicateList.get((int) (Math.random() * (PredicateList.size())));
 			rule.GetAction().PerformAction();
-			if (rule.GetAction().ActionComplete()) {
-				System.out.println("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
-				System.out.println(devices.GetDeviceMapList().toString());
-				DeviceStatePrinter.print(devices);
-			}
+			System.out.println("---\nPredicate\t-> Action\t= " + rule.GetAction().ActionName());
+			if (rule.GetAction().ActionComplete())
+				PrintConsole(devices);
+
 			PredicateList.remove(rule);
 		}
+
 	}
+
+	public void PrintEventHandler() {
+		if (!EventHandlerList.isEmpty()) {
+			ArrayList<String> CheckEventType = new ArrayList<>();
+			for (Rule rule : EventHandlerList) {
+
+				CheckEventType.add(rule.GetEventHandler().EventType());
+			}
+			if (!CheckEventType.contains("Timer")) {
+				
+				System.out.println("Rule\t\t-> EventHandler\t= " + EventHandlerList.toString());
+			}
+		}
+	}
+
+	public void PrintConsole(RegisteredDevices devices) {
+		System.out.println("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
+		System.out.println(devices.GetDeviceMapList().toString());
+		DeviceStatePrinter.print(devices);
+	}
+
 }
