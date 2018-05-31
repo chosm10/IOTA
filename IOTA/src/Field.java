@@ -51,10 +51,6 @@ public class Field implements EventElement {
 		return this.current_value;
 	}
 
-	public String GetType() {
-		return "Field";
-	}
-
 	public String GetFieldName() {
 		return this.fieldName;
 	}

@@ -1,14 +1,10 @@
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
+
+
 
 public class Evaluation {
 	private RuleSet ruleSet;
-
-	private RuleSet forCheckRule;
 	private ArrayList<Rule> EventHandlerList;
 	private ArrayList<Rule> PredicateList;
 

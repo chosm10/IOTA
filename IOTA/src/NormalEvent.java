@@ -1,5 +1,3 @@
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class NormalEvent implements Event {
 	private String EventType = "Normal";

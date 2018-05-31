@@ -1,6 +1,4 @@
 
-import java.util.ArrayList;
-
 public class OneAction implements Action {
 	protected Device device;
 	protected String field;

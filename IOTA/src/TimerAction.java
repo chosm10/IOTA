@@ -1,8 +1,4 @@
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import javax.swing.plaf.synth.SynthStyleFactory;
 
 public class TimerAction implements Action { // 액션을 객체로 받아 타이머를 이용한다.
 	Timer timer;

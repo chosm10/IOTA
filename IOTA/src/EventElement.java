@@ -2,7 +2,6 @@
 public interface EventElement {
 	public String GetOldValue();
 	public String GetCurrentValue();
-	public String GetType();
 	public String GetFieldName();
 	public String GetDevName();
 	public String PrintEventState();
