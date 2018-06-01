@@ -20,14 +20,14 @@ public class LogicalPredicate implements Predicate {
 		this.op = op;
 		this.predicate2 = predicate2;
 	}
-	public boolean CheckPredicate() {
+	public boolean checkPredicate() {
 		switch(op) {
 		case 1 :
-			return predicate1.CheckPredicate() && predicate2.CheckPredicate();
+			return predicate1.checkPredicate() && predicate2.checkPredicate();
 		case 2 :
-			return predicate1.CheckPredicate() || predicate2.CheckPredicate();
+			return predicate1.checkPredicate() || predicate2.checkPredicate();
 		case 3 :
-			return !predicate1.CheckPredicate();//NOT 연산을 사용 할 때
+			return !predicate1.checkPredicate();//NOT 연산을 사용 할 때
 		}
 		return false;
 	}

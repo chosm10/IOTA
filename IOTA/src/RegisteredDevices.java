@@ -15,30 +15,30 @@ public class RegisteredDevices {
 		MotionSensor porchMotionSensor = new MotionSensor("PorchMotionSensor");
 		HallwayLight hallwayLight = new HallwayLight("HallwayLight");
 
-		AddDevice(entranceDoor);
-		AddDevice(kitchenDoor);
-		AddDevice(porchMotionSensor);
-		AddDevice(hallwayLight);
+		addDevice(entranceDoor);
+		addDevice(kitchenDoor);
+		addDevice(porchMotionSensor);
+		addDevice(hallwayLight);
 	}
-	public void AddDevice(Device device) {   // 사용할 장치를 등록한다.
-		deviceMap.put(device.GetDevName(), device);
-		deviceMapList.add(device.GetDevName());
+	public void addDevice(Device device) {   // 사용할 장치를 등록한다.
+		deviceMap.put(device.getDevName(), device);
+		deviceMapList.add(device.getDevName());
 	}
-	public void DeleteDevice(String devName) {  // 장치의 등록을 해제한다.
-		deviceMap.remove(devName);
-		deviceMapList.remove(devName);
+	public void deleteDevice(String deviceName) {  // 장치의 등록을 해제한다.
+		deviceMap.remove(deviceName);
+		deviceMapList.remove(deviceName);
 	}
-	public Device GetDevice(String devName) {  // 장치의 이름으로 장치를 가져온다.
-		return this.deviceMap.get(devName);
+	public Device getDevice(String deviceName) {  // 장치의 이름으로 장치를 가져온다.
+		return this.deviceMap.get(deviceName);
 	}
-	public Property GetDeviceProperty(String devName) {  //장치의 이름으로 장치의 Property를 가져온다.
-		return this.deviceMap.get(devName).GetProperty();
+	public Property getDeviceProperty(String deviceName) {  //장치의 이름으로 장치의 Property를 가져온다.
+		return this.deviceMap.get(deviceName).getProperty();
 	}
-	public ArrayList<String> GetDeviceMapList() {   // 등록된 장치의 맵을 반복하는데 사용한다.
+	public ArrayList<String> getDeviceMapList() {   // 등록된 장치의 맵을 반복하는데 사용한다.
 		return this.deviceMapList;
 	}
-	public boolean IsRegisteredDevice(String devName) {   //장치의 이름으로 등록되 있는지 확인한다.
-		return deviceMap.containsKey(devName);
+	public boolean isRegisteredDevice(String deviceName) {   //장치의 이름으로 등록되 있는지 확인한다.
+		return deviceMap.containsKey(deviceName);
 	}
 }
 

@@ -6,7 +6,7 @@ public class HallwayLight extends Device{
 		ArrayList<String> switches = new ArrayList<>();
 		switches.add("On");
 		switches.add("Off");
-		property.AddProperty("Switch", switches);
-		AddUsingField("Switch");
+		property.addProperty("Switch", switches);
+		addUsingField("Switch");
 	}
 }

@@ -7,7 +7,7 @@ public class MotionSensor extends Device{
 		ArrayList<String> switches = new ArrayList<>();
 		switches.add("On");
 		switches.add("Off");
-		property.AddProperty("Switch", switches);
-		AddUsingField("Switch"); // 여러 사용가능한 property중 Switch만 사용한다.
+		property.addProperty("Switch", switches);
+		addUsingField("Switch"); // 여러 사용가능한 property중 Switch만 사용한다.
 	}
 }

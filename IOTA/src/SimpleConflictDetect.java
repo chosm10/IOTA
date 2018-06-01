@@ -9,7 +9,7 @@ public class SimpleConflictDetect {
 	}
 
 	
-	public void GetNewState(RegisteredDevices devices) {
+	public void getNewState(RegisteredDevices devices) {
 		this.OldDevices = this.NewDevices;
 		this.NewDevices = devices;
 	}

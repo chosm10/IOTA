@@ -28,7 +28,7 @@ public class SystemTimeCheck { // 시스템 시간을 계속 받아오는 쓰레
 		this.main = main;
 	}
 
-	public void SetTimer() {				//실제 시스템 시간을 설정할 때
+	public void setTimer() {				//실제 시스템 시간을 설정할 때
 		Timer timer = new Timer();
 
 		TimerTask task = new TimerTask() {
@@ -46,7 +46,7 @@ public class SystemTimeCheck { // 시스템 시간을 계속 받아오는 쓰레
 		timer.schedule(task, 0, 200); // 타이머 갱신 간격, 1000 = 1s
 	}
 
-	public void SetVirtualTimer() {			//가상으로 타이머 이벤트의 경과를 확인하고 싶을 때
+	public void setVirtualTimer() {			//가상으로 타이머 이벤트의 경과를 확인하고 싶을 때
 		Timer timer = new Timer();
 		cal = Calendar.getInstance();
 
@@ -59,14 +59,14 @@ public class SystemTimeCheck { // 시스템 시간을 계속 받아오는 쓰레
 				CurrentTime = cal.getTime();
 				TimeToString = timeLog.format(CurrentTime);
 
-				main.eval.Evaluate(main.devices);
+				main.eval.evaluate(main.devices);
 				//System.out.println(TimeToString);
 			}
 		};
 		timer.schedule(task, 0, 200); // 타이머 갱신 간격, 1000 = 1s
 	}
 
-	public void VirtaulTimerPLUS() {
+	public void virtaulTimerPLUS() {
 		cal.add(Calendar.SECOND, 1);
 
 		CurrentTime = cal.getTime();

@@ -7,17 +7,17 @@ public class Property {
 	public Property() {
 		this.properties = new HashMap<>();
 	}
-	public HashMap<String, ArrayList<String>> GetProperties() { 
+	public HashMap<String, ArrayList<String>> getProperties() { 
 		return this.properties;
 	}
-	public void AddProperty(String property, ArrayList<String> values) {
+	public void addProperty(String property, ArrayList<String> values) {
 		this.properties.put(property, values);
 	}
-	public boolean IsRegisteredProperty(String property) { 
+	public boolean isRegisteredProperty(String property) { 
 		//등록된 property인지 확인하는 메소드 ex)Lock, Switch ...
 		return properties.containsKey(property);
 	}
-	public boolean IsRegisteredPropertyState(String property, String state) { 
+	public boolean isRegisteredPropertyState(String property, String state) { 
 		//등록된 property 값인지 확인하는 메소드 ex)Locked, UnLocked, On, Off ...
 		return properties.get(property).contains(state);
 	}

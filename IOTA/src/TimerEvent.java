@@ -28,7 +28,7 @@ public class TimerEvent implements Event {
 		return new TimerEvent(timer, CurrentTime);
 	}
 
-	public boolean IsEventTriggered() {
+	public boolean isEventHandler() {
 		switch (TimerType) {
 		case "TimerEvent":
 			if (!timer.StartTime.equals("null")) {
@@ -46,26 +46,26 @@ public class TimerEvent implements Event {
 	}
 
 	@Override
-	public String EventLog() {
+	public String getEventLog() {
 		return this.eventType + "이벤트";
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public EventElement GetElement() {
+	public EventElement getElement() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void TriggerOff() {
+	public void triggerOff() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public String EventType() {
+	public String getEventType() {
 		// TODO Auto-generated method stub
 		return this.eventType;
 	}

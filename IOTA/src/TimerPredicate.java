@@ -1,25 +1,24 @@
 
 public class TimerPredicate implements Predicate{
 	Timer timer;
-	String EndTime ="null";
-	String count;
-	public TimerPredicate(Timer timer, String count) {
+	String endTime ="null";
+	String timerValue;
+	public TimerPredicate(Timer timer, String timerValue) {
 		this.timer = timer;
-		this.count = count;
+		this.timerValue = timerValue;
 	}
 
 	@Override
-	public boolean CheckPredicate() {
+	public boolean checkPredicate() {
 		// TODO Auto-generated method stub
-		if(this.EndTime.equals("null")) {
-			this.EndTime = IotaMain.time.getEndTime(Integer.parseInt(count));
+		if(this.endTime.equals("null")) {
+			this.endTime = IotaMain.time.getEndTime(Integer.parseInt(timerValue));
 		}
-		if(IotaMain.time.TimeToString.equals(EndTime)) {
-			this.EndTime="null";
+		if(IotaMain.time.TimeToString.equals(endTime)) {
+			this.endTime="null";
 			return true;
 		}
-		else
-			return false;
+		return false;
 	}
 
 }

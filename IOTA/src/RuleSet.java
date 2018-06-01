@@ -18,12 +18,12 @@ public class RuleSet {
 	}
 
 	public void add(Rule r) {
-		if (!RuleSet.containsKey(r.GetEventHandler())) {
-			RuleSet.put(r.GetEventHandler(), new ArrayList<>());
+		if (!RuleSet.containsKey(r.getEventHandler())) {
+			RuleSet.put(r.getEventHandler(), new ArrayList<>());
 			
 		}
-		RuleSet.get(r.GetEventHandler()).add(r);
-		EventCheck.add(r.GetEventHandler());
+		RuleSet.get(r.getEventHandler()).add(r);
+		EventCheck.add(r.getEventHandler());
 		RuleList.add(r);
 	}
 }

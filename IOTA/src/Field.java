@@ -4,8 +4,8 @@ public class Field implements EventElement {
 	private String old_value;
 	private String current_value;
 	private String fieldType;
-	private boolean Trigger = false;
-	private int ActionCount = 0;
+	private boolean trigger = false;
+	private int actionCount = 0;
 
 	private String fieldName;
 	private String devName;
@@ -13,7 +13,7 @@ public class Field implements EventElement {
 	public Field(String value, String FieldName, String devName) {
 		this.old_value = value;
 		this.current_value = value;
-		if (IsStringDouble(value)) {
+		if (isStringDouble(value)) {
 			this.fieldType = "Double";
 		} else {
 			this.fieldType = "String";
@@ -22,18 +22,18 @@ public class Field implements EventElement {
 		this.devName = devName;
 	}
 
-	public void FieldChange(String changedValue) { // 필드 값을 바꾸려면 바뀌기 전 값을 옛날 값으로 바뀔 값을 현재 값으로 한다.
-		if (!GetCurrentValue().equals(changedValue)) {
+	public void fieldChange(String changedValue) { // 필드 값을 바꾸려면 바뀌기 전 값을 옛날 값으로 바뀔 값을 현재 값으로 한다.
+		if (!getCurrentValue().equals(changedValue)) {
 			this.old_value = current_value;
 			this.current_value = changedValue;
-			this.ActionCount++;
+			this.actionCount++;
 		
-		if (!GetOldValue().equals(GetCurrentValue()))
-			this.TriggerOn();
+		if (!getOldValue().equals(getCurrentValue()))
+			this.triggerOn();
 		}
 	}
 
-	public boolean IsStringDouble(String value) {
+	public boolean isStringDouble(String value) {
 		try {
 			Double.parseDouble(value);
 			return true;
@@ -43,38 +43,38 @@ public class Field implements EventElement {
 		}
 	}
 
-	public String GetOldValue() { // 바뀌기 전의 필드 값을 반환
+	public String getOldValue() { // 바뀌기 전의 필드 값을 반환
 		return this.old_value;
 	}
 
-	public String GetCurrentValue() { // 현재 필드의 값을 반환
+	public String getCurrentValue() { // 현재 필드의 값을 반환
 		return this.current_value;
 	}
 
-	public String GetFieldName() {
+	public String getFieldName() {
 		return this.fieldName;
 	}
 
-	public void TriggerOn() {
-		this.Trigger = true;
+	public void triggerOn() {
+		this.trigger = true;
 	}
 
-	public void TriggerOff() {
-		this.Trigger = false;
+	public void triggerOff() {
+		this.trigger = false;
 	}
 
-	public String GetDevName() {
+	public String getDevName() {
 		return this.devName;
 	}
 
-	public String PrintEventState() {
+	public String printEventState() {
 		return this.devName + " " + this.fieldName;
 	}
 
 	@Override
-	public boolean GetTrigger() {
+	public boolean isTriggered() {
 
-		return this.Trigger;
+		return this.trigger;
 	}
 
 }

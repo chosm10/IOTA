@@ -1,12 +1,12 @@
 public interface Event {
 
-	public boolean IsEventTriggered();
+	public boolean isEventHandler();
 	
-	public String EventType();
+	public String getEventType();
 
-	public String EventLog();
+	public String getEventLog();
 
-	public EventElement GetElement();
+	public EventElement getElement();
 
-	public void TriggerOff();
+	public void triggerOff();
 }

@@ -12,11 +12,11 @@ public class PredicateList implements Predicate{
 		this.predicateList.add(predicate);
 		
 		for(Predicate pred : predicateList) {
-			CheckList.add(pred.CheckPredicate());
+			CheckList.add(pred.checkPredicate());
 		}
 	}
 	@Override
-	public boolean CheckPredicate() {
+	public boolean checkPredicate() {
 	
 		if(!CheckList.contains(false))
 			return true;

@@ -72,28 +72,28 @@ public class NormalEvent implements Event {
 
 	}
 
-	public boolean IsEventTriggered() { // 전, 후 값 상관 없이 값이 변했는지
+	public boolean isEventHandler() { // 전, 후 값 상관 없이 값이 변했는지
 
-		if (!this.eventElement.GetOldValue().equals(this.eventElement.GetCurrentValue())
-				&& this.eventElement.GetTrigger()) {
+		if (!this.eventElement.getOldValue().equals(this.eventElement.getCurrentValue())
+				&& this.eventElement.isTriggered()) {
 			switch (caseType) {
 
 			case " From 이벤트 ":
-				if ((this.eventElement.GetOldValue().equals(n1))) {
+				if ((this.eventElement.getOldValue().equals(n1))) {
 				//	System.out.println(EventLog());
 					return true;
 
 				} else
 					return false;
 			case " To 이벤트 ":
-				if (this.eventElement.GetCurrentValue().equals(n2)) {
+				if (this.eventElement.getCurrentValue().equals(n2)) {
 				//	System.out.println(EventLog());
 					return true;
 				} else
 					return false;
 			case " FromTo 이벤트 ":
-				if ((this.eventElement.GetOldValue().equals(this.n1))
-						&& (this.eventElement.GetCurrentValue().equals(this.n2))) {
+				if ((this.eventElement.getOldValue().equals(this.n1))
+						&& (this.eventElement.getCurrentValue().equals(this.n2))) {
 				//	System.out.println(EventLog());
 					return true;
 				} else
@@ -111,20 +111,20 @@ public class NormalEvent implements Event {
 		return false;
 	}
 
-	public void TriggerOff() {
-		this.GetElement().TriggerOff();
+	public void triggerOff() {
+		this.getElement().triggerOff();
 	}
 
-	public EventElement GetElement() {
+	public EventElement getElement() {
 		return this.eventElement;
 	}
 
-	public String EventLog() {
-		return (this.eventElement.PrintEventState() + caseType);
+	public String getEventLog() {
+		return (this.eventElement.printEventState() + caseType);
 	}
 
 	@Override
-	public String EventType() {
+	public String getEventType() {
 		// TODO Auto-generated method stub
 		return this.EventType;
 	}

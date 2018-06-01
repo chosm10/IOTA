@@ -14,9 +14,9 @@ public class AnyActions implements Action { // 한번에 여러 액션들을 하
 	}
 
 	@Override
-	public boolean ActionComplete() {
+	public boolean isCompleted() {
 		for (Action action : actions) {
-			actionsComplete.add(action.ActionComplete());
+			actionsComplete.add(action.isCompleted());
 		}
 		if (actionsComplete.contains(true))
 			return true;
@@ -24,17 +24,17 @@ public class AnyActions implements Action { // 한번에 여러 액션들을 하
 			return false;
 	}
 
-	public String ActionName() {
+	public String getActionName() {
 		ArrayList<String> ActionNames = new ArrayList<>();
 		for (Action action : actions)
-			ActionNames.add(action.ActionName());
+			ActionNames.add(action.getActionName());
 		return ActionNames.toString();
 	}
 
 	@Override
-	public void PerformAction() {
+	public void performAction() {
 		for (Action ac : actions)
-			ac.PerformAction();
+			ac.performAction();
 		// TODO Auto-generated method stub
 	}
 

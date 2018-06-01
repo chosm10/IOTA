@@ -9,13 +9,13 @@ public class Rule {
 		this.predicate = predicate;
 		this.action = action;
 	}
-	public Event GetEventHandler() {
+	public Event getEventHandler() {
 		return this.event;
 	}
-	public Predicate GetPredicate() {
+	public Predicate getPredicate() {
 		return this.predicate;
 	}
-	public Action GetAction() {
+	public Action getAction() {
 		return this.action;
 	}
 }

@@ -10,14 +10,14 @@ public class CompPredicate implements Predicate {
 	public CompPredicate(Device device, String oprnd1, int op, String oprnd2) throws RuntimeException { // oprnd1은 필드나
 																										// 타이머, oprnd2는
 																										// 필드나 상수
-		if ((!device.GetProperty().IsRegisteredProperty(oprnd1)) && (oprnd1 != "Timer"))
+		if ((!device.getProperty().isRegisteredProperty(oprnd1)) && (oprnd1 != "Timer"))
 			throw new RuntimeException(oprnd1 + "은 등록된 Field나 Timer여야 합니다.");
 		else if ((op != LESS_THAN) && (op != EQUAL))
 			throw new RuntimeException(op + "는 등록된 연산자가 아닙니다. 1: =, 2: < 중 하나를 사용하세요.");
 
 		if (!oprnd1.equals("Timer")) {
-			if (!(device.GetProperty().IsRegisteredPropertyState(oprnd1, oprnd2)
-					|| device.GetEventElement(oprnd1).IsStringDouble(oprnd2)))
+			if (!(device.getProperty().isRegisteredPropertyState(oprnd1, oprnd2)
+					|| device.getEventElement(oprnd1).isStringDouble(oprnd2)))
 				throw new RuntimeException(oprnd2 + "는 장치에 등록된 Property나 상수여야 합니다.");
 		}
 		this.device = device;
@@ -34,8 +34,8 @@ public class CompPredicate implements Predicate {
 		return new CompPredicate(device, oprnd1, CompPredicate.LESS_THAN, oprnd2);
 	}
 
-	public boolean CheckPredicate() {
-		String currentElementValue = device.GetEventElement(oprnd1).GetCurrentValue(); // oprand1의 현재 값
+	public boolean checkPredicate() {
+		String currentElementValue = device.getEventElement(oprnd1).getCurrentValue(); // oprand1의 현재 값
 		switch (op) {
 		case 1:
 			return currentElementValue.equals(oprnd2);

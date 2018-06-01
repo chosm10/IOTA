@@ -9,28 +9,28 @@ public class TimerAction implements Action { // 액션을 객체로 받아 타�
 		this.string = string;
 	}
 
-	public void PerformAction() {
+	public void performAction() {
 		if (string.equals("ON")) {
 			//System.out.println("Timer On");
-			timer.TimerStart();
-			TimeLog.actionLog.add(IotaMain.time.TimeToString + " "+ActionName());
+			timer.start();
+			TimeLog.actionLog.add(IotaMain.time.TimeToString + " "+getActionName());
 		}
 		
 		if (string.equals("OFF")&&!timer.StartTime.equals("null")) {
 			//System.out.println("Timer Off");
-			timer.TimerStop();
-			TimeLog.actionLog.add(IotaMain.time.TimeToString + " "+ActionName());
+			timer.stop();
+			TimeLog.actionLog.add(IotaMain.time.TimeToString + " "+getActionName());
 		}
 
 	}
 
 	@Override
-	public boolean ActionComplete() {
+	public boolean isCompleted() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public String ActionName() {
+	public String getActionName() {
 		return "Timer" + "." +string;
 	}
 
