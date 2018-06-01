@@ -21,8 +21,8 @@ public class Evaluation {
 
 		while (!eventHandlerList.isEmpty()) {
 
-			PredicateCheck(eventHandlerList);
-			Action(predicateList, devices);
+			predicateCheck(eventHandlerList);
+			actionPerform(predicateList, devices);
 			eventCheck(this.ruleSet);
 
 			if (!eventHandlerList.isEmpty()) {
@@ -52,7 +52,7 @@ public class Evaluation {
 		printEventHandler();
 	}
 
-	public void PredicateCheck(ArrayList<Rule> EventHandlerList) {
+	public void predicateCheck(ArrayList<Rule> EventHandlerList) {
 		while (!EventHandlerList.isEmpty()) {
 			Rule rule = EventHandlerList.get((int) (Math.random() * (EventHandlerList.size())));
 			if (rule.getPredicate().checkPredicate() && !predicateList.contains(rule))
@@ -63,7 +63,7 @@ public class Evaluation {
 			System.out.println("---\nEventHandler\t-> Predicate\t= " + predicateList.toString());
 	}
 
-	public void Action(ArrayList<Rule> PredicateList, RegisteredDevices devices) {
+	public void actionPerform(ArrayList<Rule> PredicateList, RegisteredDevices devices) {
 		while (!PredicateList.isEmpty()) {
 			Rule rule = PredicateList.get((int) (Math.random() * (PredicateList.size())));
 			rule.getAction().performAction();
