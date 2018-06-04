@@ -31,7 +31,7 @@ public class OneAction implements Action {
 		if (!this.device.getEventElement(this.field).getCurrentValue().equals(action)) {
 			this.device.deviceFieldChange(this.field, action);
 			actionComplete = true;
-			TimeLog.actionLog.add(IotaMain.time.TimeToString + " " + this.getActionName());
+			TimeLog.actionLog.add(IotaMain.time.timeLog + " " + this.getActionName());
 		}
 
 	}

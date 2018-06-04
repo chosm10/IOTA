@@ -6,7 +6,6 @@ public class IotaMain {
 	Evaluation eval;
 	static SystemTimeCheck time;
 	Scanner input;
-	
 
 	public static void main(String[] args) throws InterruptedException {
 		// Scanner input = new Scanner(System.in);
@@ -31,7 +30,7 @@ public class IotaMain {
 		actions2.addAction(action22);
 		Rule rule2 = new Rule(event2, predicate2, actions2);
 		/// Rule 3 for Timer
-		
+
 		TimerEvent timerEvent1 = TimerEvent.Timer((main.devices.getDevice("PorchMotionSensor").Timer));
 		TimerPredicate timerPredicate1 = new TimerPredicate(main.devices.getDevice("PorchMotionSensor").Timer, "5");
 		AnyActions timerActions = new AnyActions();
@@ -39,22 +38,45 @@ public class IotaMain {
 		TimerAction timerAction2 = new TimerAction(main.devices.getDevice("PorchMotionSensor").Timer, "OFF");
 		timerActions.addAction(timerAction1);
 		timerActions.addAction(timerAction2);
-		
+
 		Rule rule3 = new Rule(timerEvent1, timerPredicate1, timerActions);
 
+		/// Rule 4 - normal , Rule 5 - for Timer
+		NormalEvent event3 = NormalEvent.From(main.devices.getDevice("KitchenDoor").getEventElement("Lock"),
+				"UnLocked");
+		CompPredicate predicate3 = CompPredicate.CompEqual(main.devices.getDevice("KitchenDoor"), "Lock", "Locked");
+		OneAction action3 = new OneAction(main.devices.getDevice("HallwayLight"), "Switch", "On");
+		TimerAction action33 = new TimerAction(main.devices.getDevice("HallwayLight").Timer, "ON");
+		AnyActions actions3 = new AnyActions();
+		actions3.addAction(action3);
+		actions3.addAction(action33);
+		Rule rule5 = new Rule(event3, predicate3, actions3);
+
+		TimerEvent timerEvent6 = TimerEvent.Timer((main.devices.getDevice("HallwayLight").Timer));
+		TimerPredicate timerPredicate6 = new TimerPredicate(main.devices.getDevice("HallwayLight").Timer, "5");
+		AnyActions timerActions6 = new AnyActions();
+		OneAction timerAction6 = new OneAction(main.devices.getDevice("HallwayLight"), "Switch", "Off");
+		TimerAction timerAction66 = new TimerAction(main.devices.getDevice("HallwayLight").Timer, "OFF");
+		timerActions6.addAction(timerAction6);
+		timerActions6.addAction(timerAction66);
+		Rule rule6 = new Rule(timerEvent6, timerPredicate6, timerActions6);
+
+		// Rule rule4 = new Rule(event3, predicate3, action3);
+
 		//// Rule Set
-		ruleset= new RuleSet();
+		ruleset = new RuleSet();
 		ruleset.add(rule1);
 		ruleset.add(rule2);
 		ruleset.add(rule3);
+		ruleset.add(rule5);
+		ruleset.add(rule6);
 
-	
 		main.eval = new Evaluation(ruleset);
 		IotaMain.time = new SystemTimeCheck(main);
-		
+
 		time.setVirtualTimer();
-		//time.SetTimer();
-	
+		// time.SetTimer();
+
 		/// 콘솔 창 출력
 		printConsole(main);
 
@@ -100,10 +122,9 @@ public class IotaMain {
 		System.out.println("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
 		System.out.println(main.devices.getDeviceMapList().toString());
 		DeviceStatePrinter.print(main.devices);
-		
 
 		while (true) {
-			
+
 			System.out.print("Device: ");
 			String device = main.input.nextLine();
 			if (device.equals("Stop")) { // Stop이 입력 되면 스레드 중지
@@ -118,14 +139,14 @@ public class IotaMain {
 			}
 			if (device.equals("+")) {
 				main.time.virtaulTimerPLUS();
-				System.out.println(main.time.TimeToString);
+				System.out.println(main.time.timeLog);
 				continue;
 			}
 
 			System.out.print("Field: ");
 			String field = main.input.nextLine();
 
-			System.out.print("State: "); 
+			System.out.print("State: ");
 			String state = main.input.nextLine();
 
 			main.getEventHandler(device, field, state);

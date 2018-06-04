@@ -35,12 +35,12 @@ public class CompPredicate implements Predicate {
 	}
 
 	public boolean checkPredicate() {
-		String currentElementValue = device.getEventElement(oprnd1).getCurrentValue(); // oprand1의 현재 값
+		String currentValue = device.getEventElement(oprnd1).getCurrentValue(); // oprand1의 현재 값
 		switch (op) {
 		case 1:
-			return currentElementValue.equals(oprnd2);
+			return currentValue.equals(oprnd2);
 		case 2:
-			return Double.parseDouble(currentElementValue) < Double.parseDouble(oprnd2);
+			return Double.parseDouble(currentValue) < Double.parseDouble(oprnd2);
 		}
 		return false;
 	}

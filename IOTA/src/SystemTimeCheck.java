@@ -12,9 +12,9 @@ public class SystemTimeCheck { // 시스템 시간을 계속 받아오는 쓰레
 
 	Calendar cal = Calendar.getInstance();
 	////// Used To get CurrentTime
-	Date CurrentTime;
-	String TimeToString;
-	SimpleDateFormat timeLog = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	Date currentTime;
+	String timeLog;
+	SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	//// Used to get TimerEndTime
 	Date date2;
@@ -35,9 +35,9 @@ public class SystemTimeCheck { // 시스템 시간을 계속 받아오는 쓰레
 			public void run() {
 
 				cal = Calendar.getInstance();
-				CurrentTime = new Date();
-				cal.setTime(CurrentTime);
-				TimeToString = timeLog.format(CurrentTime);
+				currentTime = new Date();
+				cal.setTime(currentTime);
+				timeLog = timeFormat.format(currentTime);
 
 				//main.eval.Evaluate(main.devices);
 
@@ -50,14 +50,14 @@ public class SystemTimeCheck { // 시스템 시간을 계속 받아오는 쓰레
 		Timer timer = new Timer();
 		cal = Calendar.getInstance();
 
-		CurrentTime = new Date();
-		cal.setTime(CurrentTime);
-		TimeToString = timeLog.format(CurrentTime);
+		currentTime = new Date();
+		cal.setTime(currentTime);
+		timeLog = timeFormat.format(currentTime);
 
 		TimerTask task = new TimerTask() {
 			public void run() {
-				CurrentTime = cal.getTime();
-				TimeToString = timeLog.format(CurrentTime);
+				currentTime = cal.getTime();
+				timeLog = timeFormat.format(currentTime);
 
 				main.eval.evaluate(main.devices);
 				//System.out.println(TimeToString);
@@ -69,8 +69,8 @@ public class SystemTimeCheck { // 시스템 시간을 계속 받아오는 쓰레
 	public void virtaulTimerPLUS() {
 		cal.add(Calendar.SECOND, 1);
 
-		CurrentTime = cal.getTime();
-		TimeToString = timeLog.format(CurrentTime);
+		currentTime = cal.getTime();
+		timeLog = timeFormat.format(currentTime);
 
 	}
 

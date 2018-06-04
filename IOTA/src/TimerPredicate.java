@@ -10,11 +10,11 @@ public class TimerPredicate implements Predicate{
 
 	@Override
 	public boolean checkPredicate() {
-		// TODO Auto-generated method stub
+
 		if(this.endTime.equals("null")) {
 			this.endTime = IotaMain.time.getEndTime(Integer.parseInt(timerValue));
 		}
-		if(IotaMain.time.TimeToString.equals(endTime)) {
+		if(IotaMain.time.timeLog.equals(endTime)) {
 			this.endTime="null";
 			return true;
 		}

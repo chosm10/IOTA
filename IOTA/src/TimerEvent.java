@@ -31,13 +31,13 @@ public class TimerEvent implements Event {
 	public boolean isEventHandler() {
 		switch (TimerType) {
 		case "TimerEvent":
-			if (!timer.StartTime.equals("null")) {
-				return true;
-			}
-			else
+			if (timer.StartTime.equals("null")) {
 				return false;
+			}
+			return true;
+			
 		case "ClockEvent":
-			if (EventTime.equals(ChangeTimeFormat.format(IotaMain.time.CurrentTime)))
+			if (EventTime.equals(ChangeTimeFormat.format(IotaMain.time.currentTime)))
 				return true;
 		default:
 			return false;
@@ -45,11 +45,11 @@ public class TimerEvent implements Event {
 
 	}
 
-	@Override
 	public String getEventLog() {
 		return this.eventType + "이벤트";
-		// TODO Auto-generated method stub
-
+	}
+	public String getEventType() {
+		return this.eventType;
 	}
 
 	@Override
@@ -62,12 +62,6 @@ public class TimerEvent implements Event {
 	public void triggerOff() {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public String getEventType() {
-		// TODO Auto-generated method stub
-		return this.eventType;
 	}
 
 }

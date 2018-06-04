@@ -1,8 +1,6 @@
 
 import java.util.ArrayList;
 
-
-
 public class Evaluation {
 	private RuleSet ruleSet;
 	private ArrayList<Rule> eventHandlerList;
@@ -25,30 +23,31 @@ public class Evaluation {
 			actionPerform(predicateList, devices);
 			eventCheck(this.ruleSet);
 
-			if (!eventHandlerList.isEmpty()) {
-				ArrayList<String> CheckEventType = new ArrayList<>();
-				for (Rule rule : eventHandlerList) {
-					CheckEventType.add(rule.getEventHandler().getEventType());
-				}
-				if (!CheckEventType.contains("Normal"))
-					break;
-			} else
+			if (eventHandlerList.isEmpty())
+				break;
+
+			ArrayList<String> checkEventType = new ArrayList<>();
+			for (Rule rule : eventHandlerList) {
+				checkEventType.add(rule.getEventHandler().getEventType());
+			}
+			if (!checkEventType.contains("Normal"))
 				break;
 		}
+
 	}
 
 	public void eventCheck(RuleSet ruleSet) {
 
-		for (Event event : ruleSet.EventCheck) {
+		for (Event event : ruleSet.eventList) {
 			if (event.isEventHandler()) {
-				if (!eventHandlerList.contains(ruleSet.RuleSet.get(event)))
-					eventHandlerList.addAll(ruleSet.RuleSet.get(event));
+				if (!eventHandlerList.contains(ruleSet.ruleSet.get(event)))
+					eventHandlerList.addAll(ruleSet.ruleSet.get(event));
 				else
 					continue;
 				event.triggerOff();
 			}
 		}
-		
+
 		printEventHandler();
 	}
 
@@ -84,7 +83,7 @@ public class Evaluation {
 				CheckEventType.add(rule.getEventHandler().getEventType());
 			}
 			if (!CheckEventType.contains("Timer")) {
-				
+
 				System.out.println("Rule\t\t-> EventHandler\t= " + eventHandlerList.toString());
 			}
 		}

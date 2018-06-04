@@ -1,8 +1,9 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class AnyActions implements Action { // 한번에 여러 액션들을 하게 하는 액션들을 갖고 있고 실행하는 클래스
-	ArrayList<Action> actions;
-	ArrayList<Boolean> actionsComplete;
+	List<Action> actions;
+	List<Boolean> actionsComplete;
 
 	public AnyActions() {
 		actions = new ArrayList<>();
@@ -20,21 +21,20 @@ public class AnyActions implements Action { // 한번에 여러 액션들을 하
 		}
 		if (actionsComplete.contains(true))
 			return true;
-		else
-			return false;
+		return false;
 	}
 
 	public String getActionName() {
-		ArrayList<String> ActionNames = new ArrayList<>();
+		ArrayList<String> actionNames = new ArrayList<>();
 		for (Action action : actions)
-			ActionNames.add(action.getActionName());
-		return ActionNames.toString();
+			actionNames.add(action.getActionName());
+		return actionNames.toString();
 	}
 
 	@Override
 	public void performAction() {
-		for (Action ac : actions)
-			ac.performAction();
+		for (Action action : actions)
+			action.performAction();
 		// TODO Auto-generated method stub
 	}
 
