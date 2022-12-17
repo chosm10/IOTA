@@ -1,10 +1,10 @@
-
 public class ConstPredicate implements Predicate {
 	boolean constValue;
-	public ConstPredicate(boolean value) {   // Ã³À½ ¼³Á¤ÇÑ Âü, °ÅÁş¸¸ ¹İÈ¯ÇÏ´Â Å¬·¡½º
+	public ConstPredicate(boolean value) {   // ì²˜ìŒ ì„¤ì •í•œ ì°¸, ê±°ì§“ë§Œ ë°˜í™˜í•˜ëŠ” í´ë˜ìŠ¤
 		this.constValue = value;
 	}
-	public boolean CheckPredicate() {
+	public boolean checkPredicate() {
 		return this.constValue;
 	}
+
 }

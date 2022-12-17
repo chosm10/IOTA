@@ -1,4 +1,4 @@
 
 public interface Predicate {
-	public boolean CheckPredicate();
+	public boolean checkPredicate();
 }

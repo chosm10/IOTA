@@ -1,39 +1,80 @@
 
-public class Field implements EventElement{
+
+public class Field implements EventElement {
 	private String old_value;
 	private String current_value;
 	private String fieldType;
+	private boolean trigger = false;
+	private int actionCount = 0;
 
-	public Field(String value) {
+	private String fieldName;
+	private String devName;
+
+	public Field(String value, String FieldName, String devName) {
 		this.old_value = value;
 		this.current_value = value;
-		if(IsStringDouble(value)) {
+		if (isStringDouble(value)) {
 			this.fieldType = "Double";
-		} 
-		else {
+		} else {
 			this.fieldType = "String";
 		}
+		this.fieldName = FieldName;
+		this.devName = devName;
 	}
-	public void FieldChange(String changedValue) { // ÇÊµå °ªÀ» ¹Ù²Ù·Á¸é ¹Ù²î±â Àü °ªÀ» ¿¾³¯ °ªÀ¸·Î ¹Ù²ğ °ªÀ» ÇöÀç °ªÀ¸·Î ÇÑ´Ù.
-		this.old_value = current_value;
-		this.current_value = changedValue;
+
+	public void fieldChange(String changedValue) { // í•„ë“œ ê°’ì„ ë°”ê¾¸ë ¤ë©´ ë°”ë€Œê¸° ì „ ê°’ì„ ì˜›ë‚  ê°’ìœ¼ë¡œ ë°”ë€” ê°’ì„ í˜„ì¬ ê°’ìœ¼ë¡œ í•œë‹¤.
+		if (!getCurrentValue().equals(changedValue)) {
+			this.old_value = current_value;
+			this.current_value = changedValue;
+			this.actionCount++;
+		
+		if (!getOldValue().equals(getCurrentValue()))
+			this.triggerOn();
+		}
 	}
-	public boolean IsStringDouble(String value) {
+
+	public boolean isStringDouble(String value) {
 		try {
 			Double.parseDouble(value);
 			return true;
-		} catch(NumberFormatException e) {
+		} catch (NumberFormatException e) {
 
 			return false;
 		}
 	}
-	public String GetOldValue() { //¹Ù²î±â ÀüÀÇ ÇÊµå °ªÀ» ¹İÈ¯
+
+	public String getOldValue() { // ë°”ë€Œê¸° ì „ì˜ í•„ë“œ ê°’ì„ ë°˜í™˜
 		return this.old_value;
 	}
-	public String GetCurrentValue() { //ÇöÀç ÇÊµåÀÇ °ªÀ» ¹İÈ¯
+
+	public String getCurrentValue() { // í˜„ì¬ í•„ë“œì˜ ê°’ì„ ë°˜í™˜
 		return this.current_value;
 	}
-	public String GetType() {
-		return "Field";
+
+	public String getFieldName() {
+		return this.fieldName;
 	}
+
+	public void triggerOn() {
+		this.trigger = true;
+	}
+
+	public void triggerOff() {
+		this.trigger = false;
+	}
+
+	public String getDevName() {
+		return this.devName;
+	}
+
+	public String printEventState() {
+		return this.devName + " " + this.fieldName;
+	}
+
+	@Override
+	public boolean isTriggered() {
+
+		return this.trigger;
+	}
+
 }

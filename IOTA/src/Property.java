@@ -1,24 +1,24 @@
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Property {
 	private HashMap<String, ArrayList<String>> properties;
 	public Property() {
 		this.properties = new HashMap<>();
 	}
-	public HashMap<String, ArrayList<String>> GetProperties() { 
+	public HashMap<String, ArrayList<String>> getProperties() { 
 		return this.properties;
 	}
-	public void AddProperty(String property, ArrayList<String> values) {
+	public void addProperty(String property, ArrayList<String> values) {
 		this.properties.put(property, values);
 	}
-	public boolean IsRegisteredProperty(String property) { 
-		//µî·ÏµÈ propertyÀÎÁö È®ÀÎÇÏ´Â ¸Ş¼Òµå ex)Lock, Switch ...
+	public boolean isRegisteredProperty(String property) { 
+		//ë“±ë¡ëœ propertyì¸ì§€ í™•ì¸í•˜ëŠ” ë©”ì†Œë“œ ex)Lock, Switch ...
 		return properties.containsKey(property);
 	}
-	public boolean IsRegisteredPropertyState(String property, String state) { 
-		//µî·ÏµÈ property °ªÀÎÁö È®ÀÎÇÏ´Â ¸Ş¼Òµå ex)Locked, UnLocked, On, Off ...
+	public boolean isRegisteredPropertyState(String property, String state) { 
+		//ë“±ë¡ëœ property ê°’ì¸ì§€ í™•ì¸í•˜ëŠ” ë©”ì†Œë“œ ex)Locked, UnLocked, On, Off ...
 		return properties.get(property).contains(state);
 	}
 	

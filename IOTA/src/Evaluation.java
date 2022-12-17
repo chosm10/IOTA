@@ -1,33 +1,98 @@
+
 import java.util.ArrayList;
-import java.util.Set;
 
 public class Evaluation {
 	private RuleSet ruleSet;
-	private ArrayList<Integer> triggeredEvent;
-	private ArrayList<Integer> truePredicate;
+	private ArrayList<Rule> eventHandlerList;
+	private ArrayList<Rule> predicateList;
 
 	public Evaluation(RuleSet ruleSet) {
-		this.ruleSet = ruleSet;	
-		triggeredEvent = new ArrayList<>();
-		truePredicate = new ArrayList<>();
+		this.ruleSet = ruleSet;
+		this.eventHandlerList = new ArrayList<>();
+		this.predicateList = new ArrayList<>();
+		this.predicateList = new ArrayList<>();
+
 	}
-	public void Evaluate(RegisteredDevices devices){
-		for(Event e : ruleSet.GetEventHandlerList()) {
-			if(e.IsEventTriggered())
-				triggeredEvent.add(ruleSet.GetEventHandlerList().indexOf(e));
+
+	public void evaluate(RegisteredDevices devices) {
+		eventCheck(this.ruleSet);
+
+		while (!eventHandlerList.isEmpty()) {
+
+			predicateCheck(eventHandlerList);
+			actionPerform(predicateList, devices);
+			eventCheck(this.ruleSet);
+
+			if (eventHandlerList.isEmpty())
+				break;
+
+			ArrayList<String> checkEventType = new ArrayList<>();
+			for (Rule rule : eventHandlerList) {
+				checkEventType.add(rule.getEventHandler().getEventType());
+			}
+			if (!checkEventType.contains("Normal"))
+				break;
 		}
-		for(Integer i : triggeredEvent) {
-			Predicate p = ruleSet.GetPredicateList().get(i);
-			if(p.CheckPredicate())
-				truePredicate.add(ruleSet.GetPredicateList().indexOf(p));
-		}
-		while(!truePredicate.isEmpty()) { // Predicate¿Ã true¿Œ actionµÈ¿ª random«— º¯º≠∑Œ Ω««‡
-			int rand = (int)(Math.random() * truePredicate.size());
-			ruleSet.GetActionList().get(truePredicate.remove(rand)).PerformAction();
-		}
-		if(!truePredicate.isEmpty()) {
-			System.out.println("Evaluateø° ¿««— ªÛ≈¬ ¡§∫∏");
-			DeviceStatePrinter.print(devices);
-		}	
+
 	}
+
+	public void eventCheck(RuleSet ruleSet) {
+
+		for (Event event : ruleSet.eventList) {
+			if (event.isEventHandler()) {
+				if (!eventHandlerList.contains(ruleSet.ruleSet.get(event)))
+					eventHandlerList.addAll(ruleSet.ruleSet.get(event));
+				else
+					continue;
+				event.triggerOff();
+			}
+		}
+
+		printEventHandler();
+	}
+
+	public void predicateCheck(ArrayList<Rule> EventHandlerList) {
+		while (!EventHandlerList.isEmpty()) {
+			Rule rule = EventHandlerList.get((int) (Math.random() * (EventHandlerList.size())));
+			if (rule.getPredicate().checkPredicate() && !predicateList.contains(rule))
+				predicateList.add(rule);
+			EventHandlerList.remove(rule);
+		}
+		if (!predicateList.isEmpty())
+			System.out.println("---\nEventHandler\t-> Predicate\t= " + predicateList.toString());
+	}
+
+	public void actionPerform(ArrayList<Rule> PredicateList, RegisteredDevices devices) {
+		while (!PredicateList.isEmpty()) {
+			Rule rule = PredicateList.get((int) (Math.random() * (PredicateList.size())));
+			rule.getAction().performAction();
+			System.out.println("---\nPredicate\t-> Action\t= " + rule.getAction().getActionName());
+			if (rule.getAction().isCompleted())
+				printConsole(devices);
+
+			PredicateList.remove(rule);
+		}
+
+	}
+
+	public void printEventHandler() {
+		if (!eventHandlerList.isEmpty()) {
+			ArrayList<String> CheckEventType = new ArrayList<>();
+			for (Rule rule : eventHandlerList) {
+
+				CheckEventType.add(rule.getEventHandler().getEventType());
+			}
+			if (!CheckEventType.contains("Timer")) {
+
+				System.out.println("Rule\t\t-> EventHandler\t= " + eventHandlerList.toString());
+			}
+		}
+	}
+
+	public void printConsole(RegisteredDevices devices) {
+		System.out.println("„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°„Ö°");
+		System.out.println(devices.getDeviceMapList().toString());
+		DeviceStatePrinter.print(devices);
+	}
+
 }

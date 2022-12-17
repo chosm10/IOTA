@@ -1,30 +1,37 @@
 
-public class TimerAction implements Action { 
-	// Stop m, Start m Ã³·³ Timer¸¦ ÀÛµ¿ÇÏ´Â Action
-	//±â´ÉÀº Timer Å¬·¡½º¿¡¼­ ¸Ş¼Òµå¸¦ °¡Á®´Ù »ç¿ëÇÏ¸é µÉ °Í °°´Ù.
-	private Device device;
-	private String action;
-	
-	public TimerAction(Device device, String action) throws RuntimeException { //actionÀº Start³ª Stop		
-		this.device = device;
-		this.action = action;
+
+public class TimerAction implements Action { // ì•¡ì…˜ì„ ê°ì²´ë¡œ ë°›ì•„ íƒ€ì´ë¨¸ë¥¼ ì´ìš©í•œë‹¤.
+	Timer timer;
+	String string;
+
+	public TimerAction(Timer timer, String string) {
+		this.timer = timer;
+		this.string = string;
 	}
-	public static TimerAction TimerStart(Device device) {
-		return new TimerAction(device, "Start");
-	}
-	public static TimerAction TimerStop(Device device) {
-		return new TimerAction(device, "Stop");
-	}
-	public void PerformAction() { 
-		switch(action) { // start timer at 0, ¹«Á¶°Ç 0¿¡¼­¸¸ ½ÃÀÛÇÑ´Ù´Â ÀüÁ¦·Î
-		case "Start" :
-			this.device.m.SetVirtualTime();
-			//this.device.m.StartTime();
-			break;
-		case "Stop" :
-			this.device.m.StopVirtualTime();
-			//this.device.m.StopTime();
-			break;
+
+	public void performAction() {
+		if (string.equals("ON")) {
+			//System.out.println("Timer On");
+			timer.start();
+			TimeLog.actionLog.add(IotaMain.time.timeLog + " "+getActionName());
 		}
+		
+		if (string.equals("OFF")&&!timer.StartTime.equals("null")) {
+			//System.out.println("Timer Off");
+			timer.stop();
+			TimeLog.actionLog.add(IotaMain.time.timeLog + " "+getActionName());
+		}
+
 	}
+
+	
+	public String getActionName() {
+		return "Timer" + "." +string;
+	}
+	@Override
+	public boolean isCompleted() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

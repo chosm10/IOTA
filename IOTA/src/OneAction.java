@@ -3,24 +3,50 @@ public class OneAction implements Action {
 	protected Device device;
 	protected String field;
 	protected String action;
-	
-	public OneAction(Device device, String field, String action) throws RuntimeException {  
-		if(!device.GetProperty().IsRegisteredProperty(field))
-			throw new RuntimeException(field + " : µî·ÏµÇÁö ¾ÊÀº  ÇÊµå·Î´Â º¯°æ ÇÒ ¼ö ¾ø½À´Ï´Ù.");
-		else if(!device.GetProperty().IsRegisteredPropertyState(field, action))
-			throw new RuntimeException(action + " : µî·ÏµÇÁö ¾ÊÀº  ¼Ó¼º °ªÀ¸·Î´Â º¯°æ ÇÒ ¼ö ¾ø½À´Ï´Ù.");
-		this.device = device;	
+	protected String name;
+	protected boolean actionComplete = false;
+
+	public OneAction(Device device, String field, String action) throws RuntimeException {
+		if (!device.getProperty().isRegisteredProperty(field))
+			throw new RuntimeException(field + " : ë“±ë¡ë˜ì§€ ì•Šì€  í•„ë“œë¡œëŠ” ë³€ê²½ í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+		else if (!device.getProperty().isRegisteredPropertyState(field, action))
+			throw new RuntimeException(action + " : ë“±ë¡ë˜ì§€ ì•Šì€  ì†ì„± ê°’ìœ¼ë¡œëŠ” ë³€ê²½ í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+		this.device = device;
 		this.field = field;
 		this.action = action;
+		this.name = this.device.getDevName() + " " + this.field + " "
+				+ this.device.getEventElement(field).getCurrentValue() + " >> " + this.action;
 	}
-	//GetActionDevice(), GetActionValue()´Â Actions¿¡¼­ ¿©·¯ ¾×¼ÇÀ» ÇÑ¹ø¿¡ ¼öÇà ÇÒ ¶§ »ç¿ëÇÑ´Ù.
+
+	// GetActionDevice(), GetActionValue()ëŠ” Actionsì—ì„œ ì—¬ëŸ¬ ì•¡ì…˜ì„ í•œë²ˆì— ìˆ˜í–‰ í•  ë•Œ ì‚¬ìš©í•œë‹¤.
 	public Device GetActionDevice() {
 		return this.device;
 	}
+
 	public String GetActionValue() {
 		return this.action;
 	}
-	public void PerformAction() { 
-		this.device.DeviceFieldChange(this.field, this.action);
+
+	public void performAction() {
+		if (!this.device.getEventElement(this.field).getCurrentValue().equals(action)) {
+			this.device.deviceFieldChange(this.field, action);
+			actionComplete = true;
+			TimeLog.actionLog.add(IotaMain.time.timeLog + " " + this.getActionName());
+		}
+
 	}
+
+	@Override
+	public boolean isCompleted() {
+		// TODO Auto-generated method stub
+		return this.actionComplete;
+	}
+
+	public String getActionName() {
+		this.name = this.device.getDevName() + "." + this.field +
+					"["+ this.device.getEventElement(field).getOldValue() + " >> " + this.action + "]";
+		return this.name;
+
+	}
+
 }

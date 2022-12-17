@@ -1,7 +1,14 @@
 
 public interface EventElement {
-	public String GetOldValue();
-	public String GetCurrentValue();
-	public String GetType();
-	public boolean IsStringDouble(String value);
+	public String getOldValue();
+	public String getCurrentValue();
+	public String getFieldName();
+	public String getDevName();
+	public String printEventState();
+	public boolean isStringDouble(String value);
+	public void triggerOn();
+	public void triggerOff();
+	public boolean isTriggered();
+	
+
 }

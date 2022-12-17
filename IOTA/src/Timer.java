@@ -1,67 +1,19 @@
-import java.util.Calendar;
 
-public class Timer implements EventElement { //Timer ½º·¹µå°¡ ½ÃÀÛ µÇ°í ¸ŞÀÎ ½º·¹µå¿¡¼­ ½º·¹µå¸¦ ¸ØÃâ°ÍÀ» notifyÇØÁÖ¸é ½º·¹µå´Â ¸ØÃá´Ù.(½ÃÀÛ½Ã°£, ÇöÀç½Ã°£À» ¸â¹ö·Î °®´Â´Ù.)
-	private int startTime; //IOTA¿¡¼­ start time at 0 Ã³·³ at µÚ¿¡ Àû´Â ¼ıÀÚ
-	private int startMinute; //½ÇÁ¦ Å¸ÀÌ¸Ó°¡ start µÉ ¶§ÀÇ ½Ã°£ Áß ºĞ(minute)À» ±¸ÇÑ´Ù.
-	private int virtualTime;
-	private Boolean IsStart;
+public class Timer {
+
+	String timer;
+	String StartTime = "null";
+
+	public void start() { // íƒ€ì´ë¨¸ê°€ ì‹œì‘ëœ ì‹œê°„ì„ ì €ì¥, ëë‚  ì‹œê°„ì„ ê³„ì‚°.
+
+		if (StartTime.equals("null"))
+			this.StartTime = IotaMain.time.timeLog;
 	
-	public Timer() {
-		this.startTime = 0;
-		this.virtualTime = 0;
-		this.IsStart = false;
 	}
-	public void StartTime() {
-		this.IsStart = true;
-		this.startTime = 0;
-		startMinute = Calendar.getInstance().get(Calendar.MINUTE);
-	}
-	public void StopTime() {
-		this.IsStart = false;
-		this.startMinute = 0;
-	}
-	public boolean IsTimePassed(int minute) { // timer = 5 Ã³·³ timerÀÇ °ªÀÌ ½Ã°£ÀÌ Èê·¯¼­ 5°¡ µÇ¾ú´ÂÁö¸¦ ¾Ë·ÁÁØ´Ù. Predicate Ã¼Å© ÇÒ ¶§ »ç¿ë
-		int time = Calendar.getInstance().get(Calendar.MINUTE);
-		int realPassedTime = time - startMinute;
-		int passedTime = minute - startTime; // timerÀÇ ½ÃÀÛ ½Ã°£ÀÌ 0ÀÌ ¾Æ´Ò¼öµµ ÀÖ±â ¶§¹®¿¡ ¸¸¾à 2¿¡¼­ ½ÃÀÛÇØ¼­ 5°¡ ‰ç³Ä°í ¹°¾îº¸¸é 3ºĞÀÌ Áö³ª¾ß ÂüÀ» ¹İÈ¯ÇÑ´Ù.
-		return (realPassedTime == passedTime) ? true : false; //½ÇÁ¦ Áö³­ ½Ã°£°ú IOTA¿¡¼­ ½ÃÀÛÇÑ ½Ã°£, ¹Ù²ï ½Ã°£ÀÇ Â÷°¡ °°À¸¸é ÂüÀ» ¹İÈ¯ÇÑ´Ù.
-	}
-	public void ChangeVirtualTime(int virtualTime) { // °¡»óÀ¸·Î ½Ã°£ÀÇ Èå¸§À» ÁØ´Ù.
-		this.virtualTime = virtualTime;
-	}
-	public void SetVirtualTime() {
-		this.IsStart = true;
-	}
-	public void StopVirtualTime() {
-		this.virtualTime = 0;
-		this.IsStart = false;
-	}
-	public boolean IsVirtualTimerStart() {
-		if(this.IsStart)
-			return true;
-		return false;
-	}
-	public boolean IsVirtualTimePassed(int minute) { // °¡»óÀÇ ½Ã°£ÀÌ Èê·¶´ÂÁö È®ÀÎÇÑ´Ù.
-		return (this.virtualTime == minute) ? true : false;
-	}
-	public String GetOldValue() {
-		return Integer.toString(this.startTime);
-	}
-	public String GetCurrentValue() {
-		int currentTime = Calendar.getInstance().get(Calendar.MINUTE);
-		int currentValue = currentTime - startMinute + startTime; //½ÃÀÛ ½Ã°£ºÎÅÍ Èê·¯¼­ ÇöÀç ¸î ºĞÀÎÁö ¹İÈ¯ÇÑ´Ù.
-		return Integer.toString(currentValue);
-	}
-	public String GetType() {
-		return "Timer";
-	}
-	public boolean IsStringDouble(String value) {
-		try {
-			Double.parseDouble(value);
-			return true;
-		} catch(NumberFormatException e) {
 
-			return false;
-		}
+	public void stop() {
+		if (!StartTime.equals("null"))
+			this.StartTime = "null";
 	}
+
 }
